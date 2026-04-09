@@ -1,4 +1,5 @@
-# Project 2 - Moon/Horoscope/APOD
+# Project 2 - Discord Bot
+Moon/Horoscope/APOD
 Repo for Project 2
 
 # main.py
