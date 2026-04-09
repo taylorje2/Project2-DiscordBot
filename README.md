@@ -1,4 +1,4 @@
-# Project 2 - Moon/Horoscope
+# Project 2 - Moon/Horoscope/APOD
 Repo for Project 2
 
 # main.py
