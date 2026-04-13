@@ -13,8 +13,9 @@ Base = declarative_base()
 
 class User(Base):
     __tablename__ = "UserInfo"
-    Id = Column(Integer, primary_key=True)
-    Zodiac = Column(String)
+    User_Id = Column(Integer, primary_key=True)
+    Username = Column(String)
+    User_Zodiac = Column(String)
 
     def __repr__(self):
         return f"{self.Id} | {self.Zodiac}"
@@ -86,11 +87,22 @@ def get_allhoroscope(zodiac_count):
 
     session.commit()
 
-    
+def save_userinfo(zodiac: str, author : str):
 
-get_allhoroscope(zodiac_count)
+    try:
+        numOfUsers = User.__tablename__.index
+    finally:
+        numOfUsers = 0
+
+    to_add = User(User_Id = numOfUsers + 1, Username = author, User_Zodiac = zodiac)
+    session.add(to_add)
+
+    session.commit()
 
 #-------------------------------
+
+
+
 
 
 

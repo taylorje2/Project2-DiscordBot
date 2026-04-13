@@ -23,18 +23,20 @@ intents.message_content = True # allows bot to send message
 bot = commands.Bot(command_prefix='/', intents=intents)
 #^any commands sent bot start with '/', for instance '/horoscope'
 
-@bot.command
+@bot.command()
 async def horoscope(ctx): #when the user does "/horoscope this method happens"
     horoscope = webhoroscopeapi.get_userhoroscope(ctx.author) #gets the horoscope based on the one asking for it
     await ctx.send(horoscope)
 
-@bot.event
-async def setupzodiac(ctx, *, msg):
-    zodiac = msg.content.lower
-    if zodiac != "aries" or zodiac != "taurus" or zodiac != "gemini" or zodiac != "cancer" or zodiac != "leo" or zodiac != "virgo" or zodiac != "libra" or zodiac != "scorpio" or zodiac != "sagittarius" or zodiac != "capricorn" or zodiac != "aquarius" or zodiac != "pisces":
-        await ctx.send("That is not a zodiac sign")
+@bot.command()
+async def setupzodiac(ctx, *, zodiac):
+    zodiac = zodiac.lower()
+
+    if zodiac != "aries" and zodiac != "aries" and zodiac != "taurus" and zodiac != "gemini" and zodiac != "cancer" and zodiac != "leo" and zodiac != "virgo" and zodiac != "libra" and zodiac != "scorpio" and zodiac != "sagittarius" and zodiac != "capricorn" and zodiac != "aquarius" and zodiac != "pisces":
+        await ctx.send(f"{zodiac} is not a zodiac")
     else:
-        await ctx.send("Zodiac Info has been Set Up!")
+        await ctx.send(f"Your chosen zodiac is {zodiac}")
+        webhoroscopeapi.save_userinfo(zodiac, ctx.author.name)
 
 
 #--------------------------

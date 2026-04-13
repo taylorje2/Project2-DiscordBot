@@ -3,7 +3,7 @@ Moon/Horoscope/APOD
 Repo for Project 2
 
 # main.py
-4/8/26 need to figure out how to do .env file
+4/13/26 Made env file complete with token
 
 # zodiac.py
 4/9/26 started... buttttt... seeing if making the database would be easier....
@@ -14,3 +14,6 @@ Repo for Project 2
     - Need to fix the data types for the dates in the data type...
     - Do we want a table that holds horoscopes for a couple of days for each zodiac sign?
     - Need to figure out how to store the daily horoscopes from the API onto the database.
+
+# fromapis.py
+4/13/26 made code to get zodiac and the user's username to save to table in db
