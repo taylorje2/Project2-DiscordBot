@@ -1,65 +1,51 @@
 import requests
+#-----------
+from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy.orm import declarative_base
+#------------
 from pydantic import BaseModel
-
+#------------
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from sqlalchemy.orm import declarative_base
-from sqlalchemy import Column, String, Integer
+#------------------------------------
+Base = declarative_base()
+
+class User(Base):
+    __tablename__ = "UserInfo"
+    Id = Column(Integer, primary_key=True)
+    Zodiac = Column(String)
+
+    def __repr__(self):
+        return f"{self.Id} | {self.Zodiac}"
+
+class Horoscope(Base):
+    __tablename__ = "DailyHoroscope"
+    Id = Column(Integer, primary_key=True)
+    horoscopeDate = Column(String)
+    horoscopeSign = Column(String)
+    horoscopeText = Column(String)
+
+    def __repr__(self):
+        return f"{self.Id} | {self.horoscopeDate} | {self.horoscopeSign} | {self.horoscopeText}"
 
 
 #------------------------------------
 
-class Horoscope(BaseModel):
+class APIHoroscope(BaseModel): # the response cut up into the details(what we want)
     date : str
     sign : str
     horoscope : str
     
-    
 
-class APIResponse(BaseModel):
-    data : Horoscope
+class APIResponse(BaseModel): #this is what the api responds with
+    data : APIHoroscope
 
-   
-    
 #------------------------------------
 
-zodiac_signs = ["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"]
-
-zodiac_counter = 0
-
-def get_horoscope():
-
-    for zodiac in zodiac_signs:
-        zodiac_horoscope = f"https://freehoroscopeapi.com/api/v1/get-horoscope/daily?sign={zodiac}"
-        
-        h_info = requests.get(zodiac_horoscope).json()
-
-        api_response = APIResponse(**h_info)
-
-        print(api_response)
-        horoscope = {
-                "Date" : api_response.data.date,
-                "Sign" : api_response.data.sign,
-                "Horoscope" : api_response.data.horoscope
-                } 
-        print(horoscope)
-        
-        to_add = HoroscopeTable(horoscope)
-
-        session.add(to_add)
-
-        session.commit()
-
-get_horoscope()
-
-#-------------------------------
-
-SQLALCHEMY_DATABASE_URL = "sqlite:///./data.db"
+SQLALCHEMY_DATABASE_URL = "sqlite:///./projectTwo.db"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
-
-Base = declarative_base()
 
 # This binds our ORM class models
 Base.metadata.create_all(bind=engine)
@@ -68,13 +54,43 @@ Base.metadata.create_all(bind=engine)
 Session = sessionmaker(bind=engine)
 
 session = Session()
+    
+#------------------------------------
 
-class HoroscopeTable(Base):
-    __tablename__ = "DailyHoroscope"
-    Id = Column(Integer, primary_key=True)
-    horoscopeDate = Column(String),
-    horoscopeSign = Column(String),
-    horoscopeText = Column(String)
+zodiac_signs = ["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"]
+#all the signs used in \/
 
-    def __repr__(self):
-        return f"{self.Id} | {self.horoscopeDate} | {self.horoscopeSign} | {self.horoscopeText}"
+zodiac_count = 0
+
+def get_allhoroscope(zodiac_count):
+
+    for zodiac in zodiac_signs:
+        zodiac_horoscope = f"https://freehoroscopeapi.com/api/v1/get-horoscope/daily?sign={zodiac}"
+        
+        h_info = requests.get(zodiac_horoscope).json()
+
+        api_response = APIResponse(**h_info)
+
+        horoscope = { #divides the 
+                "Date" : api_response.data.date,
+                "Sign" : api_response.data.sign,
+                "Horoscope" : api_response.data.horoscope
+                } 
+        print(horoscope)
+
+        zodiac_count += 1
+
+        to_add = Horoscope(Id = zodiac_count, horoscopeDate = horoscope["Date"], horoscopeSign = horoscope["Sign"], horoscopeText = horoscope["Horoscope"] )
+
+        session.add(to_add)
+
+    session.commit()
+
+    
+
+get_allhoroscope(zodiac_count)
+
+#-------------------------------
+
+
+
