@@ -1,6 +1,6 @@
 # pip install -U discord.py
 
-import webhoroscopeapi
+import fromapis
 import discord 
 from discord.ext import commands
 import logging
@@ -25,18 +25,18 @@ bot = commands.Bot(command_prefix='/', intents=intents)
 
 @bot.command()
 async def horoscope(ctx): #when the user does "/horoscope this method happens"
-    horoscope = webhoroscopeapi.get_userhoroscope(ctx.author) #gets the horoscope based on the one asking for it
+    horoscope = fromapis.get_userhoroscope(ctx.author.name) #gets the horoscope based on the one asking for it
     await ctx.send(horoscope)
 
 @bot.command()
 async def setupzodiac(ctx, *, zodiac):
     zodiac = zodiac.lower()
-
     if zodiac != "aries" and zodiac != "aries" and zodiac != "taurus" and zodiac != "gemini" and zodiac != "cancer" and zodiac != "leo" and zodiac != "virgo" and zodiac != "libra" and zodiac != "scorpio" and zodiac != "sagittarius" and zodiac != "capricorn" and zodiac != "aquarius" and zodiac != "pisces":
         await ctx.send(f"{zodiac} is not a zodiac")
     else:
-        await ctx.send(f"Your chosen zodiac is {zodiac}")
-        webhoroscopeapi.save_userinfo(zodiac, ctx.author.name)
+        await ctx.send(f"Your saved zodiac is {zodiac}")
+        fromapis.save_userinfo(zodiac, ctx.author.name)
+
 
 
 #--------------------------

@@ -20,17 +20,6 @@ class User(Base):
     def __repr__(self):
         return f"{self.Id} | {self.Zodiac}"
 
-class Horoscope(Base):
-    __tablename__ = "DailyHoroscope"
-    Id = Column(Integer, primary_key=True)
-    horoscopeDate = Column(String)
-    horoscopeSign = Column(String)
-    horoscopeText = Column(String)
-
-    def __repr__(self):
-        return f"{self.Id} | {self.horoscopeDate} | {self.horoscopeSign} | {self.horoscopeText}"
-
-
 #------------------------------------
 
 class APIHoroscope(BaseModel): # the response cut up into the details(what we want)
@@ -99,6 +88,26 @@ def save_userinfo(zodiac: str, author : str):
 
     session.commit()
 
+
+def get_userhoroscope(author : str):
+
+    user = session.query(User).filter(User.Username == author).first()
+
+    
+    zodiac_horoscope = f"https://freehoroscopeapi.com/api/v1/get-horoscope/daily?sign={user.User_Zodiac}"
+    
+    h_info = requests.get(zodiac_horoscope).json()
+
+    api_response = APIResponse(**h_info)
+
+    horoscope = { #divides the api response
+                "Date" : api_response.data.date,
+                "Sign" : api_response.data.sign,
+                "Horoscope" : api_response.data.horoscope
+                } 
+    
+    return(horoscope["Horoscope"])
+            
 #-------------------------------
 
 
