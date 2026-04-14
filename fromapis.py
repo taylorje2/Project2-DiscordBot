@@ -47,10 +47,6 @@ session = Session()
     
 #------------------------------------
 
-zodiac_signs = ["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"]
-#all the signs used in \/
-
-zodiac_count = 0
 
 
 def save_userinfo(zodiac: str, author : str):
