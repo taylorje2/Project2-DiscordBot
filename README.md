@@ -17,3 +17,5 @@ Repo for Project 2
 
 # fromapis.py
 4/13/26 made code to get zodiac and the user's username to save to table in db
+    *Issues*
+    - When getting user_id, it gets by index number, but really want last inputs id + 1

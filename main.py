@@ -37,6 +37,13 @@ async def setupzodiac(ctx, *, zodiac):
         await ctx.send(f"Your saved zodiac is {zodiac}")
         fromapis.save_userinfo(zodiac, ctx.author.name)
 
+@bot.command()
+async def getuserinfo(ctx):
+    try:
+        userinfo = fromapis.read_userinfo(ctx.author.name)
+        await ctx.send(f"Your Id is {userinfo[0]}, your username is {userinfo[2]} , and your saved zodiac is {userinfo[1]}")
+    except:
+        await ctx.send(f"You haven't set up your user info, therefore cannot get that info :)")
 
 
 #--------------------------

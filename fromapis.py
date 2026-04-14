@@ -1,6 +1,6 @@
 import requests
 #-----------
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import declarative_base
 #------------
 from pydantic import BaseModel
@@ -47,12 +47,17 @@ session = Session()
     
 #------------------------------------
 
+def read_userinfo(author: str):
+    user = session.query(User).filter(User.Username == author).first()
+    
+    return([user.User_Id, user.User_Zodiac, user.Username])
+            
 
 
 def save_userinfo(zodiac: str, author : str):
 
     try:
-        numOfUsers = User.__tablename__.index
+        numOfUsers = User.__tablename__.index #could make problem, if could do last user id + 1 = perfect
     finally:
         numOfUsers = 0
 
