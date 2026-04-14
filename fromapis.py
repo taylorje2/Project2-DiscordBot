@@ -47,24 +47,39 @@ session = Session()
     
 #------------------------------------
 
-def read_userinfo(author: str):
-    user = session.query(User).filter(User.Username == author).first()
-    
-    return([user.User_Id, user.User_Zodiac, user.Username])
-            
+def save_userinfo(zodiac: str, author : str, id: int): #Create User
 
-
-def save_userinfo(zodiac: str, author : str):
-
-    try:
-        numOfUsers = User.__tablename__.index #could make problem, if could do last user id + 1 = perfect
-    finally:
-        numOfUsers = 0
-
-    to_add = User(User_Id = numOfUsers + 1, Username = author, User_Zodiac = zodiac)
+    to_add = User(User_Id = id, Username = author, User_Zodiac = zodiac)
     session.add(to_add)
 
     session.commit()
+
+def read_userinfo(id: int): # Read User
+    user = session.query(User).filter(User.Id == id).first()
+    
+    return([user.User_Id, user.User_Zodiac, user.Username])
+            
+def update_username(id: int, edit : str): # Update User : Username
+     
+    user = session.query(User).filter(User.User_Id == id).first()
+    session.delete(user)
+    updated_userinfo = User(User_Id = user.User_Id, Username = edit, User_Zodiac = user.User_Zodiac)
+    session.add(updated_userinfo)
+
+    session.commit()
+
+    return([user.User_Id, user.User_Zodiac, user.Username])
+
+def update_zodiac(id: int, edit : str): #update user: zodiac
+     
+    user = session.query(User).filter(User.User_Id == id).first()
+    session.delete(user)
+    updated_userinfo = User(User_Id = user.User_Id, Username = user.Username, User_Zodiac = edit)
+    session.add(updated_userinfo)
+
+    session.commit()
+
+    return([user.User_Id, user.User_Zodiac, user.Username])
 
 
 def get_userhoroscope(author : str):
