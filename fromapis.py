@@ -52,29 +52,6 @@ zodiac_signs = ["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", 
 
 zodiac_count = 0
 
-def get_allhoroscope(zodiac_count):
-
-    for zodiac in zodiac_signs:
-        zodiac_horoscope = f"https://freehoroscopeapi.com/api/v1/get-horoscope/daily?sign={zodiac}"
-        
-        h_info = requests.get(zodiac_horoscope).json()
-
-        api_response = APIResponse(**h_info)
-
-        horoscope = { #divides the 
-                "Date" : api_response.data.date,
-                "Sign" : api_response.data.sign,
-                "Horoscope" : api_response.data.horoscope
-                } 
-        print(horoscope)
-
-        zodiac_count += 1
-
-        to_add = Horoscope(Id = zodiac_count, horoscopeDate = horoscope["Date"], horoscopeSign = horoscope["Sign"], horoscopeText = horoscope["Horoscope"] )
-
-        session.add(to_add)
-
-    session.commit()
 
 def save_userinfo(zodiac: str, author : str):
 
