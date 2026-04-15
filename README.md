@@ -8,12 +8,11 @@ Repo for Project 2
 # zodiac.py
 4/9/26 started... buttttt... seeing if making the database would be easier....
 
-# Horoscope.sql
+# Horoscope.sql --> Horoscope.sqlite
 4/9/26 started sql file to implement our horoscopes database - which will hold user DOB, zodiac signs, and daily horoscopes for each sign...
-    *Issues* 
-    - Need to fix the data types for the dates in the data type...
-    - Do we want a table that holds horoscopes for a couple of days for each zodiac sign?
-    - Need to figure out how to store the daily horoscopes from the API onto the database.
+4/14/26 Removed and started a smaller sqlite file that auto increments/assigns userId that holds a users zodiac sign
 
 # fromapis.py
 4/13/26 made code to get zodiac and the user's username to save to table in db
+    *Issues*
+    - When getting user_id, it gets by index number, but really want last inputs id + 1
