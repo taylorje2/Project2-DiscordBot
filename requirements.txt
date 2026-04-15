@@ -1,0 +1,7 @@
+# in the terminal, run the following command to install the required packages:
+# pip install -r requirements.txt
+
+pydantic 
+sqlalchemy
+discord.py
+python-dotenv
