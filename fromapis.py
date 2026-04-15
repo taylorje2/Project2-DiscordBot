@@ -103,10 +103,10 @@ def get_userhoroscope(author : str):
             
 #-------------------------------
 
-# ---- API MODEL ----
+# ---- NASA APOD API MODEL ----
 
 class nasa_apod(BaseModel):
-    # birthdate for the APOD
+    # date for the APOD
     date: str
     # explanation of the APOD
     explanation: str
@@ -114,12 +114,3 @@ class nasa_apod(BaseModel):
     title: str
     # standard resolution image URL of the APOD
     url: str
-    # high res version image URL of the APOD
-    hdurl: str = "No HD version available"
-
-
-
-
-
-
-
