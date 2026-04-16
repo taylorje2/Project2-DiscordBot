@@ -60,3 +60,24 @@ async def apod(ctx):
 
 # run the bot
 bot.run(TOKEN2, log_handler=handler, log_level=logging.INFO)
+
+# confirmation message in terminal that the bot is running
+@bot.event
+async def on_ready():
+    print(f"Logged in as {bot.user.name}")
+
+
+###################################################################################
+# DELETE THIS LATER, TESTING PURPOSES ONLY, NOT PART OF FINAL BOT FUNCTIONALITY
+###################################################################################
+# reply to hello message 
+@bot.event
+async def on_message(message):
+    if message.author == bot.user:
+        return
+
+    if "hello" in message.content.lower():
+        await message.channel.send(f"Hello {message.author.mention}!")
+
+    # respond to all other messages sent
+    await bot.process_commands(message)
