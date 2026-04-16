@@ -5,8 +5,6 @@ import discord
 from discord.ext import commands
 import logging
 import os
-
-# I don't remember how to do this exactly, but I'll look in my notes... Desjardins just showed us how to do this in Advanced Database yesterday...
 from dotenv import load_dotenv
 
 # Load the .env file and get the DISCORD_TOKEN variable
