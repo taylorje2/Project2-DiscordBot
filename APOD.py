@@ -6,13 +6,16 @@ import discord
 import logging
 from discord.ext import commands
 
+from main import TOKEN
+
 load_dotenv()
 
 NASA_API_KEY = os.getenv("NASA_API_KEY")
 
 BASE_URL = "https://api.nasa.gov/planetary/apod"
 
-TOKEN = os.getenv("DISCORD_TOKEN")
+# token specifically for apod bot
+TOKEN2 = os.getenv("APOD_BOT_TOKEN")
 
 # writes all activity into discord.log file (for debug)
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
@@ -58,4 +61,4 @@ async def apod(ctx):
         await ctx.send("Sorry, I couldn't fetch the APOD for today. \nPlease try again later.")
 
 # run the bot
-bot.run(TOKEN, log_handler=handler, log_level=logging.INFO)
+bot.run(TOKEN2, log_handler=handler, log_level=logging.INFO)
