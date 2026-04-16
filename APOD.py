@@ -6,8 +6,6 @@ import discord
 import logging
 from discord.ext import commands
 
-from main import TOKEN
-
 load_dotenv()
 
 NASA_API_KEY = os.getenv("NASA_API_KEY")
