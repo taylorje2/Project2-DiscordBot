@@ -9,9 +9,7 @@ Repo for Project 2
 4/15/26 removed, no longer needed - info is in the main.py
 
 # Horoscope.sql --> Horoscope.sqlite
-4/9/26 started sql file to implement our horoscopes database - which will hold user DOB, zodiac signs, and daily horoscopes for each sign...
-4/14/26 Removed and started a smaller sqlite file that auto increments/assigns userId that holds a users zodiac sign
-4/16/26 I think the sqlite should be working now...
+4/21/26 removed - we decided to not do this anymore
 
 # fromapis.py
 4/13/26 made code to get zodiac and the user's username to save to table in db
