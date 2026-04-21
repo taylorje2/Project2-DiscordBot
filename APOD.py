@@ -33,30 +33,35 @@ bot = commands.Bot(command_prefix='/', intents=intents)
 # command for the current day's APOD (/apod)
 @bot.command()
 async def apod(ctx):
-    # parameters for the API request
-    params = {
-        "api_key": NASA_API_KEY
-    }
+    # pleaceholder text to let the user know that data is being fetched
+    placeholder = await ctx.send("**Fetching today's APOD...**")
 
-    # make the API request and get the response
-    apod_response = requests.get(BASE_URL, params=params)
+    # make the bot look like it's typing
+    async with ctx.typing():
+        # parameters for the API request
+        params = {
+            "api_key": NASA_API_KEY
+        }
 
-    # check if the request was successful
-    if apod_response.status_code == 200:
-        # parse the response JSON into a nasa_apod object
-        apod_data = nasa_apod(**apod_response.json())
+        # make the API request and get the response
+        apod_response = requests.get(BASE_URL, params=params)
 
-        # reply to user with the APOD data in an embed message
-        await ctx.send(f"Here's the Astronomy Picture of the Day for {str(apod_data.date)}:")
+        # check if the request was successful
+        if apod_response.status_code == 200:
+            # parse the response JSON into a nasa_apod object
+            apod_data = nasa_apod(**apod_response.json())
 
-        # create an embed message with the APOD data
-        embed = discord.Embed(title=apod_data.title, description=apod_data.explanation)
-        embed.set_image(url=apod_data.url)
+            # reply to user with the APOD data in an embed message
+            await ctx.send(f"Here's the APOD for today {str(apod_data.date)}:")
 
-        # send the embed message to the channel
-        await ctx.send(embed=embed)
-    else:
-        await ctx.send("Sorry, I couldn't fetch the APOD for today. \nPlease try again later.")
+            # create an embed message with the APOD data
+            embed = discord.Embed(title=apod_data.title, description=apod_data.explanation)
+            embed.set_image(url=apod_data.url)
+
+            # send the embed message to the channel
+            await ctx.send(embed=embed)
+        else:
+            await ctx.send("Sorry, I couldn't fetch the APOD for today. \nPlease try again later.")
 
 # command for past APOD
 @bot.command()
