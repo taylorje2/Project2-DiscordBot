@@ -1,12 +1,10 @@
 # pip install -U discord.py
-
+import requests
 import fromapis
 import discord 
 from discord.ext import commands
 import logging
 import os
-
-# I don't remember how to do this exactly, but I'll look in my notes... Desjardins just showed us how to do this in Advanced Database yesterday...
 from dotenv import load_dotenv
 
 # Load the .env file and get the DISCORD_TOKEN variable
@@ -36,13 +34,19 @@ async def setupuser(ctx, *, zodiac):
         await ctx.send(f"{zodiac} is not a zodiac")
     else:
         await ctx.send(f"Your saved zodiac is {zodiac}")
-        fromapis.save_userinfo(zodiac, ctx.author.name, ctx.author.id)
+        user = {
+            "user_id" : ctx.author.id,
+            "username" :ctx.author.name,
+            "zodiac" : zodiac
+        }
+        
+        requests.post("http://localhost:8000/", json=user)
 
 @bot.command()
 async def getuserinfo(ctx):
     try:
-        userinfo = fromapis.read_userinfo(ctx.author.id)
-        await ctx.author.send(f"Your Id is {userinfo[0]}, your username is {userinfo[2]} , and your saved zodiac is {userinfo[1]}")
+        userinfo = requests.get(f"http://localhost:8000/{ctx.author.id}").json()
+        await ctx.author.send(f"Your Id is {userinfo["User_Id"]}, your username is {userinfo["Username"]} , and your saved zodiac is {userinfo["User_Zodiac"]}")
         # ^ send direct message instead to server, incase the id is sensitive info
     except:
         await ctx.send(f"You haven't set up your user info, therefore cannot get that info :)")
@@ -50,9 +54,9 @@ async def getuserinfo(ctx):
 @bot.command()
 async def changeusername(ctx, *, username):
     try:
-        userinfo = fromapis.update_username(ctx.author.id, username)
-        await ctx.author.send(f"Your Id is {userinfo[0]}, your username is {userinfo[2]} , and your saved zodiac is {userinfo[1]}")
-        await ctx.send(f"{userinfo[2]} has changed their username!")
+        userinfo = requests.put(f"http://localhost:8000/{ctx.author.id}/{username}").json()
+        await ctx.author.send(f"Your Id is {userinfo["User_Id"]}, your username is {username} , and your saved zodiac is {userinfo["User_Zodiac"]}")
+        await ctx.send(f"{userinfo["Username"]} has changed their username to {username}!")
 
     except:
         await ctx.send(f"You haven't set up your user info, therefore cannot update that info :)")
@@ -65,31 +69,20 @@ async def changezodiac(ctx, *, zodiac):
         if zodiac != "aries" and zodiac != "taurus" and zodiac != "gemini" and zodiac != "cancer" and zodiac != "leo" and zodiac != "virgo" and zodiac != "libra" and zodiac != "scorpio" and zodiac != "sagittarius" and zodiac != "capricorn" and zodiac != "aquarius" and zodiac != "pisces":
             await ctx.send(f"{zodiac} is not a zodiac")
         else:
-            userinfo = fromapis.update_zodiac(ctx.author.id, zodiac)
-            await ctx.author.send(f"Your Id is {userinfo[0]}, your username is {userinfo[2]} , and your saved zodiac is {userinfo[1]}")
-            await ctx.send(f"{userinfo[2]} has changed their zodiac to {userinfo[1]}!")
+            userinfo = requests.patch(f"http://localhost:8000/{ctx.author.id}/{zodiac}").json()
+            await ctx.author.send(f"Your Id is {userinfo["User_Id"]}, your username is {userinfo["Username"]} , and your saved zodiac is {zodiac}")
+            await ctx.send(f"{userinfo["Username"]} has changed their zodiac to {zodiac}!")
 
     except:
         await ctx.send(f"You haven't set up your user info, therefore cannot update that info :)")
 
+@bot.command()
+async def deleteuser(ctx):
+    try:
+        user = requests.delete(f"http://localhost:8000/{ctx.author.id}").json()
+        await ctx.send(f"{user["Username"]} has had their data deleted.")
+    except:
+        await ctx.send(f"That user hasn't set up their data, therefore nothing to delete")
 
-#--------------------------
-# Create a new Discord client and set up event handlers
-client = discord.Client()
 
-
-    
-
-# When the bot is ready, print a message to the console
-@client.event
-async def on_ready():
-    print('Logged in as {client.user}')
-
-# When a message is sent in a channel, check if it starts with "!hello" and respond with "Hello!"
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-
-    if message.content.startswith('!hello'):
-        await message.channel.send('Hello!')
+bot.run(TOKEN, log_handler=handler, log_level=logging.DEBUG)
