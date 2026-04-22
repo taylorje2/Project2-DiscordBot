@@ -22,6 +22,8 @@ intents.message_content = True # allows bot to send message
 bot = commands.Bot(command_prefix='/', intents=intents)
 #^any commands sent bot start with '/', for instance '/horoscope'
 
+
+#-------------------------- Debugging Within the Terminal --------------------------
 # when the bot is ready, it will print this message in the terminal
 @bot.event
 async def on_ready():
@@ -30,12 +32,18 @@ async def on_ready():
 # when the bot receives a message, it will print the message content in the terminal (for debug purposes)
 @bot.event 
 async def on_message(message):
-    if message.author == bot.user: # if the message is from the bot, ignore it
+    # if the message is from the bot, ignore it
+    if message.author == bot.user: 
         return
-    print ("DEBUG:", message.content) 
+    print ("RESPONSE:", message.content) 
+    # if the message is a greeting, respond with a greeting
+    if (message.content.lower().strip() == "hello") | (message.content.lower().strip() == "hi") | (message.content.lower().strip() == "hey"): 
+        await message.channel.send("Hello! How can I help you today?")
     await bot.process_commands(message) 
-   
+#---------------------------- End of Debugging Within the Terminal --------------------------
 
+
+#--------------------------
 @bot.command()
 async def horoscope(ctx): #when the user does "/horoscope this method happens"
     horoscope = fromapis.get_userhoroscope(ctx.author.name) #gets the horoscope based on the one asking for it
@@ -103,6 +111,7 @@ async def deleteuser(ctx):
     except:
         await ctx.send(f"That user hasn't set up their data, therefore nothing to delete")
 
+# run the bot with the token, and log handler for debugging
 bot.run(TOKEN, log_handler=handler, log_level=logging.DEBUG)
 
 
