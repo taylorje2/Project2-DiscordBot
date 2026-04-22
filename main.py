@@ -11,9 +11,13 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
 #--------------------------
+# writes ALL activity into discord.log file (for debug)
+handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w') 
 
-handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w') # writes all activity into discord.log file (for debug)
-#^ create a log file, so that if an error occurs we can see which method is going wrong
+# # creates a log handler for ONLY errors, which will write all errors into error.log file (for debug)
+# errorHandler = logging.FileHandler(filename='error.log', encoding='utf-8', mode='w')
+# errorHandler.setLevel(logging.ERROR)
+
 intents = discord.Intents.default()
 intents.message_content = True # allows bot to send message
 
@@ -31,17 +35,28 @@ async def on_ready():
     await bot.tree.sync()
     print(f'{bot.user} has connected to Discord!') 
 
-# when the bot receives a message, it will print the message content in the terminal (for debug purposes)
+# when the bot receives a message, it will print the message content in the terminal, and if the message is a greeting, it will respond with a greeting (for debug purposes)
 @bot.event 
 async def on_message(message):
     # if the message is from the bot, ignore it
     if message.author == bot.user: 
         return
-    print ("DEBUG:", message.content) 
+    print ("USER MESSAGE:", message.content) 
     # if the message is a greeting, respond with a greeting
     if message.content.lower().strip() in ("hello", "hi", "hey"): 
         await message.channel.send("Hello!")
     await bot.process_commands(message) 
+
+# when an error occurs with a command, it will print the error in the terminal
+@bot.event
+async def on_app_command_error(ctx, error):
+    logging.exception("An error occurred")
+    print (f"[ERROR] An error occurred: {error}")
+
+# this is for catching any errors that occur with the bot
+@bot.tree.error
+async def on_app_command_error(interaction, error):
+    print (f"[ERROR] An error occurred: {error}")
 
 #-------------------------- END OF DEBUGGING --------------------------
 
