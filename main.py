@@ -1,4 +1,3 @@
-# pip install -U discord.py
 import requests
 import fromapis
 import discord 
@@ -23,10 +22,13 @@ bot = commands.Bot(command_prefix='/', intents=intents)
 #^any commands sent bot start with '/', for instance '/horoscope'
 
 
-#-------------------------- Debugging Within the Terminal --------------------------
+#--------------------------
+# DEBUGGING METHODS
+#--------------------------
 # when the bot is ready, it will print this message in the terminal
 @bot.event
 async def on_ready():
+    await bot.tree.sync()
     print(f'{bot.user} has connected to Discord!') 
 
 # when the bot receives a message, it will print the message content in the terminal (for debug purposes)
@@ -40,14 +42,26 @@ async def on_message(message):
     if message.content.lower().strip() in ("hello", "hi", "hey"): 
         await message.channel.send("Hello!")
     await bot.process_commands(message) 
-#---------------------------- End of Debugging Within the Terminal --------------------------
+
+#-------------------------- END OF DEBUGGING --------------------------
 
 
 #--------------------------
-@bot.command()
-async def horoscope(ctx): #when the user does "/horoscope this method happens"
-    horoscope = fromapis.get_userhoroscope(ctx.author.name) #gets the horoscope based on the one asking for it
-    await ctx.send(horoscope)
+# BOT COMMANDS
+#--------------------------
+# this is the method for the "/horoscope" command, which will get the user's horoscope based on their saved zodiac sign
+@bot.tree.command(name="horoscope", description="Get your daily horoscope")
+async def horoscope(interaction: discord.Interaction):
+    # we can remove this... I just wanted to show that the bot was acknowledging the command for testing purposes
+    await interaction.response.send_message("Getting your horoscope...")
+    # this method gets the horoscope based on the username of the person asking for it, so it will look up their saved zodiac sign and then get the horoscope for that sign
+    horoscope = fromapis.get_userhoroscope(interaction.author.name)
+    await interaction.edit_original_response(content=horoscope)
+
+# @bot.command()
+# async def horoscope(ctx): #when the user does "/horoscope this method happens"
+#     horoscope = fromapis.get_userhoroscope(ctx.author.name) #gets the horoscope based on the one asking for it
+#     await ctx.send(horoscope)
 
 # CREATE new user
 @bot.command()
