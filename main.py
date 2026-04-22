@@ -37,7 +37,7 @@ async def on_message(message):
     # if the message is from the bot, ignore it
     if message.author == bot.user: 
         return
-    print ("RESPONSE:", message.content) 
+    print ("DEBUG:", message.content) 
     # if the message is a greeting, respond with a greeting
     if message.content.lower().strip() in ("hello", "hi", "hey"): 
         await message.channel.send("Hello!")
