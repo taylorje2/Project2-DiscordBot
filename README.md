@@ -4,8 +4,16 @@ Repo for Project 2
 
 # main.py
 4/13/26 Made env file complete with token
-4/22/26 Added a confirmation message for backend to know whether they've successfully connected to the bot, added terminal debugging, added greetings, 
-    fixed f-strings so that /getuserinfo and /deleteuser responds to the user, fixed /horoscope command -->  changed ctx to interation command
+4/22/26 Added a confirmation message for backend to know whether they've successfully connected to the bot
+        Added terminal debugging - the log can get a little overwhelming, but the log detects errors better
+        Added greetings - so that we know the bot is acknowledging user messages
+        Fixed f-strings so that /getuserinfo and /deleteuser responds to the user
+        Fixed /setupuser command --> changed to /newuser and changed ctx interaction command so that we can use slash commands 
+        Fixed /horoscope command -->  changed ctx to interaction command so that we can use slash commands
+            *Issues*
+            - Need to throw in an if statement to handle the new users
+            - Blocked out and left the old code in case something happens and so we can keep track of the commands we've changed to and interaction, we can delete and clean it up after we get done with our bot
+
 
 # zodiac.py
 4/15/26 removed, no longer needed - info is in the main.py

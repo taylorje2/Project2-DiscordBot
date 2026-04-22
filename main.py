@@ -55,7 +55,7 @@ async def horoscope(interaction: discord.Interaction):
     # we can remove this... I just wanted to show that the bot was acknowledging the command for testing purposes
     await interaction.response.send_message("Getting your horoscope...")
     # this method gets the horoscope based on the username of the person asking for it, so it will look up their saved zodiac sign and then get the horoscope for that sign
-    horoscope = fromapis.get_userhoroscope(interaction.author.name)
+    horoscope = fromapis.get_userhoroscope(interaction.user.name)
     await interaction.edit_original_response(content=horoscope)
 
 # @bot.command()
@@ -63,19 +63,38 @@ async def horoscope(interaction: discord.Interaction):
 #     horoscope = fromapis.get_userhoroscope(ctx.author.name) #gets the horoscope based on the one asking for it
 #     await ctx.send(horoscope)
 
-# CREATE new user
-@bot.command()
-async def setupuser(ctx, *, zodiac):
+#------------------------- CREATE new user --------------------------
+# this method is for the "/newuser" command, which will save the user's information (id, username, and zodiac sign) into the database
+@bot.tree.command(name="newuser", description="Set up your user info with your zodiac sign")
+async def newUser(interaction: discord.Interaction, zodiac: str):
     zodiac = zodiac.lower()
-    if zodiac != "aries" and zodiac != "taurus" and zodiac != "gemini" and zodiac != "cancer" and zodiac != "leo" and zodiac != "virgo" and zodiac != "libra" and zodiac != "scorpio" and zodiac != "sagittarius" and zodiac != "capricorn" and zodiac != "aquarius" and zodiac != "pisces":
-        await ctx.send(f"{zodiac} is not a zodiac")
+    # validation to make sure that user is entering a valid zodiac sign
+    valid = ["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"]
+    if zodiac not in valid:
+        # if the zodiac sign is not valid, a message will be sent to the user saying that it is not a valid zodiac sign
+        await interaction.response.send_message(f"{zodiac} is not a zodiac")
     else:
-        await ctx.send(f"Your saved zodiac is {zodiac}")
+        # if the zodiac sign is valid, a message will be sent to the user confirming that their zodiac sign has been saved, and then their information will be sent to the database to be saved
+        await interaction.response.send_message(f"Your saved zodiac is {zodiac}")
+        # create a user object with the user's information, which will be sent to the database
         user = {
-            "user_id" : ctx.author.id,
-            "username" :ctx.author.name,
+            "user_id" : interaction.user.id,
+            "username" : interaction.user.name,
             "zodiac" : zodiac
         }
+
+# @bot.command()
+# async def setupuser(ctx, *, zodiac):
+#     zodiac = zodiac.lower()
+#     if zodiac != "aries" and zodiac != "taurus" and zodiac != "gemini" and zodiac != "cancer" and zodiac != "leo" and zodiac != "virgo" and zodiac != "libra" and zodiac != "scorpio" and zodiac != "sagittarius" and zodiac != "capricorn" and zodiac != "aquarius" and zodiac != "pisces":
+#         await ctx.send(f"{zodiac} is not a zodiac")
+#     else:
+#         await ctx.send(f"Your saved zodiac is {zodiac}")
+#         user = {
+#             "user_id" : ctx.author.id,
+#             "username" :ctx.author.name,
+#             "zodiac" : zodiac
+#         }
         
         requests.post("http://localhost:8000/", json=user)
 

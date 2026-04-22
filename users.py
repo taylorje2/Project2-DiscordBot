@@ -66,12 +66,14 @@ async def save_userinfo(user: addUser, session = Depends(get_session)):
     session.add(user)
     session.commit()
 
+# method for getting user information
 @app.get("/{id}")
 def read_userinfo(id: int, session = Depends(get_session)): # Read User
     print("getting...")
     user = session.query(User).filter(User.User_Id == id).first()
     return(user)
 
+# method for changing/updating user information
 @app.put("/{id}/{edit}")
 def update_username(id: int, edit : str, session = Depends(get_session)): # Update User : Username
     print("updating username...")
@@ -84,6 +86,7 @@ def update_username(id: int, edit : str, session = Depends(get_session)): # Upda
 
     return(user)
 
+# method for changing/updating user zodiac sign
 @app.patch("/{id}/{edit}")
 def update_zodiac(id: int, edit : str, session = Depends(get_session)): #update user: zodiac
     
