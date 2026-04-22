@@ -5,6 +5,7 @@ Repo for Project 2
 # main.py
 4/13/26 Made env file complete with token
 4/22/26 Added a confirmation message for backend to know whether they've successfully connected to the bot
+4/22/26 Added terminal debugging, added greetings 
 
 # zodiac.py
 4/15/26 removed, no longer needed - info is in the main.py
