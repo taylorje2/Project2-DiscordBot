@@ -19,4 +19,4 @@ Repo for Project 2
     - When getting user_id, it gets by index number, but really want last inputs id + 1
 
 # gitignore
-4/22/26 Added discord.log to this
+4/22/26 Added discord.log, __pycache__, and .idea
