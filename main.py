@@ -37,8 +37,8 @@ async def on_message(message):
         return
     print ("RESPONSE:", message.content) 
     # if the message is a greeting, respond with a greeting
-    if (message.content.lower().strip() == "hello") | (message.content.lower().strip() == "hi") | (message.content.lower().strip() == "hey"): 
-        await message.channel.send("Hello! How can I help you today?")
+    if message.content.lower().strip() in ("hello", "hi", "hey"): 
+        await message.channel.send("Hello!")
     await bot.process_commands(message) 
 #---------------------------- End of Debugging Within the Terminal --------------------------
 
@@ -49,7 +49,7 @@ async def horoscope(ctx): #when the user does "/horoscope this method happens"
     horoscope = fromapis.get_userhoroscope(ctx.author.name) #gets the horoscope based on the one asking for it
     await ctx.send(horoscope)
 
-# methods for setting up user information
+# CREATE new user
 @bot.command()
 async def setupuser(ctx, *, zodiac):
     zodiac = zodiac.lower()
@@ -70,7 +70,7 @@ async def setupuser(ctx, *, zodiac):
 async def getuserinfo(ctx):
     try:
         userinfo = requests.get(f"http://localhost:8000/{ctx.author.id}").json()
-        await ctx.author.send(f"Your Id is {userinfo["User_Id"]}, your username is {userinfo["Username"]} , and your saved zodiac is {userinfo["User_Zodiac"]}")
+        await ctx.author.send(f"Your Id is {userinfo['User_Id']}, your username is {userinfo['Username']}, and your saved zodiac is {userinfo['User_Zodiac']}")
         # ^ send direct message instead to server, incase the id is sensitive info
     except:
         await ctx.send(f"You haven't set up your user info, therefore cannot get that info :)")
@@ -80,8 +80,8 @@ async def getuserinfo(ctx):
 async def changeusername(ctx, *, username):
     try:
         userinfo = requests.put(f"http://localhost:8000/{ctx.author.id}/{username}").json()
-        await ctx.author.send(f"Your Id is {userinfo["User_Id"]}, your username is {username} , and your saved zodiac is {userinfo["User_Zodiac"]}")
-        await ctx.send(f"{userinfo["Username"]} has changed their username to {username}!")
+        await ctx.author.send(f"Your Id is {userinfo['User_Id']}, your username is {username} , and your saved zodiac is {userinfo['User_Zodiac']}")
+        await ctx.send(f"{userinfo['Username']} has changed their username to {username}!")
 
     except:
         await ctx.send(f"You haven't set up your user info, therefore cannot update that info :)")
@@ -96,8 +96,8 @@ async def changezodiac(ctx, *, zodiac):
             await ctx.send(f"{zodiac} is not a zodiac")
         else:
             userinfo = requests.patch(f"http://localhost:8000/{ctx.author.id}/{zodiac}").json()
-            await ctx.author.send(f"Your Id is {userinfo["User_Id"]}, your username is {userinfo["Username"]} , and your saved zodiac is {zodiac}")
-            await ctx.send(f"{userinfo["Username"]} has changed their zodiac to {zodiac}!")
+            await ctx.author.send(f"Your Id is {userinfo['User_Id']}, your username is {userinfo['Username']} , and your saved zodiac is {zodiac}")
+            await ctx.send(f"{userinfo['Username']} has changed their zodiac to {zodiac}!")
 
     except:
         await ctx.send(f"You haven't set up your user info, therefore cannot update that info :)")
@@ -107,7 +107,7 @@ async def changezodiac(ctx, *, zodiac):
 async def deleteuser(ctx):
     try:
         user = requests.delete(f"http://localhost:8000/{ctx.author.id}").json()
-        await ctx.send(f"{user["Username"]} has had their data deleted.")
+        await ctx.send(f"{user['Username']} has had their data deleted.")
     except:
         await ctx.send(f"That user hasn't set up their data, therefore nothing to delete")
 
