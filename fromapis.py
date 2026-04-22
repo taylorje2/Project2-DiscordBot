@@ -11,6 +11,7 @@ from sqlalchemy.orm import sessionmaker
 #------------------------------------
 Base = declarative_base()
 
+# this is the table for the user information, which is stored in the database
 class User(Base):
     __tablename__ = "UserInfo"
     User_Id = Column(Integer, primary_key=True)

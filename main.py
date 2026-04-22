@@ -27,6 +27,7 @@ async def horoscope(ctx): #when the user does "/horoscope this method happens"
     horoscope = fromapis.get_userhoroscope(ctx.author.name) #gets the horoscope based on the one asking for it
     await ctx.send(horoscope)
 
+# methods for setting up user information
 @bot.command()
 async def setupuser(ctx, *, zodiac):
     zodiac = zodiac.lower()
@@ -42,6 +43,7 @@ async def setupuser(ctx, *, zodiac):
         
         requests.post("http://localhost:8000/", json=user)
 
+# method for getting user information
 @bot.command()
 async def getuserinfo(ctx):
     try:
@@ -51,6 +53,7 @@ async def getuserinfo(ctx):
     except:
         await ctx.send(f"You haven't set up your user info, therefore cannot get that info :)")
 
+# methods for changing/updating user information
 @bot.command()
 async def changeusername(ctx, *, username):
     try:
@@ -61,6 +64,7 @@ async def changeusername(ctx, *, username):
     except:
         await ctx.send(f"You haven't set up your user info, therefore cannot update that info :)")
 
+# method for changing/updating user zodiac sign
 @bot.command()
 async def changezodiac(ctx, *, zodiac):
     try:
@@ -76,6 +80,7 @@ async def changezodiac(ctx, *, zodiac):
     except:
         await ctx.send(f"You haven't set up your user info, therefore cannot update that info :)")
 
+# method for deleting user
 @bot.command()
 async def deleteuser(ctx):
     try:
@@ -83,6 +88,5 @@ async def deleteuser(ctx):
         await ctx.send(f"{user["Username"]} has had their data deleted.")
     except:
         await ctx.send(f"That user hasn't set up their data, therefore nothing to delete")
-
 
 bot.run(TOKEN, log_handler=handler, log_level=logging.DEBUG)
