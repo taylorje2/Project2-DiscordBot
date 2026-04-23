@@ -70,12 +70,12 @@ async def horoscope(interaction: discord.Interaction):
     # we can remove this... I just wanted to show that the bot was acknowledging the command for testing purposes
     await interaction.response.send_message("Getting your horoscope...")
     # this method gets the horoscope based on the username of the person asking for it, so it will look up their saved zodiac sign and then get the horoscope for that sign
-    horoscope = fromapis.get_userhoroscope(interaction.user.name)
+    horoscope = requests.get(f"http://localhost:8000/horoscope/{interaction.user.id}").json()
     await interaction.edit_original_response(content=horoscope)
 
 # @bot.command()
 # async def horoscope(ctx): #when the user does "/horoscope this method happens"
-#     horoscope = fromapis.get_userhoroscope(ctx.author.name) #gets the horoscope based on the one asking for it
+#     horoscope = fromapis.get_userhoroscope(ctx.author.id) #gets the horoscope based on the one asking for it
 #     await ctx.send(horoscope)
 
 #------------------------- CREATE new user --------------------------

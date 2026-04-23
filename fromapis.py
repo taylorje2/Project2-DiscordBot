@@ -119,11 +119,11 @@ def delete_user(id : int, session = Depends(get_session)):
     session.commit()
     return(user)
 
-def get_userhoroscope(author : str, session = get_session()):
+@app.get("/horoscope/{id}")
+def get_userhoroscope(id : int, session = Depends(get_session)):
+    print("horoscope...")
+    user = session.query(User).filter(User.User_Id == id).first()
 
-    user = session.query(User).filter(User.Username == author).first()
-
-    
     zodiac_horoscope = f"https://freehoroscopeapi.com/api/v1/get-horoscope/daily?sign={user.User_Zodiac}"
     
     h_info = requests.get(zodiac_horoscope).json()
@@ -135,7 +135,6 @@ def get_userhoroscope(author : str, session = get_session()):
                 "Sign" : api_response.data.sign,
                 "Horoscope" : api_response.data.horoscope
                 } 
-    
     return(horoscope["Horoscope"])
             
 #-------------------------------
