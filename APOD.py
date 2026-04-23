@@ -97,10 +97,10 @@ async def oldapod(ctx, date: str = None):
         else:
             await ctx.send(f"Sorry, I couldn't fetch the APOD for {str(apod_data.date)}. \nPlease try again later.")
 
-# run the bot
-bot.run(TOKEN2, log_handler=handler, log_level=logging.INFO)
-
-# confirmation message in terminal that the bot is running
+# makes sure the bot is running and prints a message in the terminal when it is ready 
 @bot.event
 async def on_ready():
     print(f"Logged in as {bot.user.name}")
+
+# run the bot
+bot.run(TOKEN2, log_handler=handler, log_level=logging.INFO)
