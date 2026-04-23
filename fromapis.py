@@ -1,3 +1,5 @@
+#python -m uvicorn fromapis:app --host localhost --port 8000
+
 import requests
 #-----------
 from sqlalchemy import Column, Integer, String
