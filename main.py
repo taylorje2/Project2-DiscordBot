@@ -112,16 +112,29 @@ async def newUser(interaction: discord.Interaction, zodiac: str):
 #         }
         
         requests.post("http://localhost:8000/", json=user)
-
-# method for getting user information
-@bot.command()
-async def getuserinfo(ctx):
+        
+#-------------------------- GET user information --------------------------
+# this method is for the "/getuserinfo" command, which will get the user's information (id, username, and zodiac sign) from the database and send it to the user in a direct message
+@bot.tree.command(name="getuserinfo", description="view user information - username and zodiac sign")
+async def getuserinfo(interaction: discord.Interaction):
+    # this method gets the user information based on the username of the person asking for it, so it will look up their saved information and then send it to them in a direct message
     try:
-        userinfo = requests.get(f"http://localhost:8000/{ctx.author.id}").json()
-        await ctx.author.send(f"Your Id is {userinfo['User_Id']}, your username is {userinfo['Username']}, and your saved zodiac is {userinfo['User_Zodiac']}")
-        # ^ send direct message instead to server, incase the id is sensitive info
+        userinfo = requests.get(f"http://localhost:8000/{interaction.user.id}").json()
+        # send direct message instead to server, incase the id is sensitive info
+        await interaction.user.send(f"Your Id is {userinfo['User_Id']}, your username is {userinfo['Username']}, and your saved zodiac is {userinfo['User_Zodiac']}")
+        # send a message in the server confirming that the user has received their information in a direct message
     except:
-        await ctx.send(f"You haven't set up your user info, therefore cannot get that info :)")
+        await interaction.response.send_message(f"You haven't set up your user info, therefore cannot get that info :)")
+
+# # method for getting user information
+# @bot.command()
+# async def getuserinfo(ctx):
+#     try:
+#         userinfo = requests.get(f"http://localhost:8000/{ctx.author.id}").json()
+#         await ctx.author.send(f"Your Id is {userinfo['User_Id']}, your username is {userinfo['Username']}, and your saved zodiac is {userinfo['User_Zodiac']}")
+#         # ^ send direct message instead to server, incase the id is sensitive info
+#     except:
+#         await ctx.send(f"You haven't set up your user info, therefore cannot get that info :)")
 
 # methods for changing/updating user information
 @bot.command()
