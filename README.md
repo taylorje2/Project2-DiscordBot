@@ -13,6 +13,7 @@ Repo for Project 2
             *Issues*
             - Need to throw in an if statement to handle the new users
             - Blocked out and left the old code in case something happens and so we can keep track of the commands we've changed to and interaction, we can delete and clean it up after we get done with our bot
+4/23/26 Fixed /getuserinfo
 
 
 # zodiac.py
