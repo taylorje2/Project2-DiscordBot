@@ -52,7 +52,7 @@ async def apod(ctx):
             apod_data = nasa_apod(**apod_response.json())
 
             # reply to user with the APOD data in an embed message
-            await ctx.send(f"Here's the APOD for today, {str(apod_data.date)}:")
+            await ctx.send(f"{ctx.author.mention}")
 
             # create an embed message with the APOD data. Embed will have a purple sidebar
             embed = discord.Embed(title=apod_data.title, description=apod_data.explanation, color=0x800080)
@@ -86,7 +86,7 @@ async def oldapod(ctx, date: str = None):
             apod_data = nasa_apod(**apod_response.json())
 
             # reply to user with the APOD data in an embed message
-            await ctx.send(f"Here's the APOD for {str(apod_data.date)}, {ctx.author.mention}:")
+            await ctx.send(f"{ctx.author.mention}")
 
             # create an embed message with the APOD data. embed will have a purple sidebar
             embed = discord.Embed(title=apod_data.title, description=apod_data.explanation, color=0x800080)
