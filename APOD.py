@@ -55,7 +55,7 @@ async def apod(ctx):
             await ctx.send(f"{ctx.author.mention}")
 
             # create an embed message with the APOD data. Embed will have a purple sidebar
-            embed = discord.Embed(title=apod_data.title, description=apod_data.explanation, color=0x800080)
+            embed = discord.Embed(title=f"{apod_data.title}\nDate: {str(apod_data.date)}\n", description=apod_data.explanation, color=0x800080)
             embed.set_image(url=apod_data.url)
 
             # send the embed message to the channel
@@ -89,7 +89,7 @@ async def oldapod(ctx, date: str = None):
             await ctx.send(f"{ctx.author.mention}")
 
             # create an embed message with the APOD data. embed will have a purple sidebar
-            embed = discord.Embed(title=apod_data.title, description=apod_data.explanation, color=0x800080)
+            embed = discord.Embed(title=f"{apod_data.title}\nDate: {str(apod_data.date)}\n", description=apod_data.explanation, color=0x800080)
             embed.set_image(url=apod_data.url)
 
             # send the embed message to the channel
