@@ -30,8 +30,11 @@ intents.members = True
 # set command prefix
 bot = commands.Bot(command_prefix='/', intents=intents)
 
+# command list tree (shows a list of bot commands when "/" is entered)
+tree = bot.tree
+
 # command for the current day's APOD (/apod)
-@bot.command()
+@bot.tree.command()
 async def apod(ctx):
     # pleaceholder text to let the user know that data is being fetched
     placeholder = await ctx.send("**Fetching today's APOD...**")
@@ -64,7 +67,7 @@ async def apod(ctx):
             await ctx.send("Sorry, I couldn't fetch the APOD for today. \nPlease try again later.")
 
 # command for past APOD
-@bot.command()
+@bot.tree.command()
 async def oldapod(ctx, date: str = None):
     # pleaceholder text to let the user know that data is being fetched
     placeholder = await ctx.send("**Fetching the APOD... This might take a second...**")
@@ -100,6 +103,8 @@ async def oldapod(ctx, date: str = None):
 # makes sure the bot is running and prints a message in the terminal when it is ready 
 @bot.event
 async def on_ready():
+    # syncs the command list to the bot 
+    await bot.tree.sync()
     print(f"Logged in as {bot.user.name}")
 
 # run the bot
