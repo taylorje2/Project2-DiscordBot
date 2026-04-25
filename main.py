@@ -202,6 +202,21 @@ async def changezodiac(interaction: discord.Interaction):
             else:
                 await interaction.send("User does not exist, pease create a new user")
 
+# @bot.command()
+# async def changezodiac(ctx, *, zodiac):
+#     try:
+#         zodiac = zodiac.lower() 
+
+#         if zodiac != "aries" and zodiac != "taurus" and zodiac != "gemini" and zodiac != "cancer" and zodiac != "leo" and zodiac != "virgo" and zodiac != "libra" and zodiac != "scorpio" and zodiac != "sagittarius" and zodiac != "capricorn" and zodiac != "aquarius" and zodiac != "pisces":
+#             await ctx.send(f"{zodiac} is not a zodiac")
+#         else:
+#             userinfo = requests.patch(f"http://localhost:8000/{ctx.author.id}/{zodiac}").json()
+#             await ctx.author.send(f"Your Id is {userinfo['User_Id']}, your username is {userinfo['Username']} , and your saved zodiac is {zodiac}")
+#             await ctx.send(f"{userinfo['Username']} has changed their zodiac to {zodiac}!")
+
+#     except:
+#         await ctx.send(f"You haven't set up your user info, therefore cannot update that info :)")
+
 #-------------------------- DELETE user --------------------------
 @bot.tree.command(name="delete", description="Delete user")
 async def deleteuser(interaction: discord.interactions):
