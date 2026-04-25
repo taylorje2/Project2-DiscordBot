@@ -1,3 +1,5 @@
+#python -m uvicorn fromapis:app --host localhost --port 8000
+
 import requests
 #-----------
 from sqlalchemy import Column, Integer, String
@@ -8,9 +10,12 @@ from pydantic import BaseModel
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+from fastapi import FastAPI, Depends
+
 #------------------------------------
 Base = declarative_base()
 
+# this is the table for the user information
 class User(Base):
     __tablename__ = "UserInfo"
     User_Id = Column(Integer, primary_key=True)
@@ -18,7 +23,15 @@ class User(Base):
     User_Zodiac = Column(String)
 
     def __repr__(self):
-        return f"{self.Id} | {self.Zodiac}"
+        return f"{self.User_Id} | { self.Username} | {self.User_Zodiac}"
+
+# this is the model for the user information
+class addUser(BaseModel):
+    user_id: int
+    username: str
+    zodiac: str
+    def __repr__(self):
+        return f"{self.user_id} | { self.username} | {self.zodiac}"
 
 #------------------------------------
 
@@ -41,26 +54,41 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL)
 Base.metadata.create_all(bind=engine)
 
 # Create a session to interact with the database
-Session = sessionmaker(bind=engine)
+session_factory = sessionmaker(bind=engine)
 
-session = Session()
-    
-#------------------------------------
+#function to give diff request endpoints a db session
+def get_session():
+    session = session_factory()
+    try:
+        yield session # try keeping the sessin
+    finally:
+        session.close()#if cant, then stop
 
-def save_userinfo(zodiac: str, author : str, id: int): #Create User
+app = FastAPI() #creates the api
 
-    to_add = User(User_Id = id, Username = author, User_Zodiac = zodiac)
-    session.add(to_add)
-
+# endpoints for the api
+@app.post("/")
+async def save_userinfo(user: addUser, session = Depends(get_session)):
+    print("saving...")
+    user = User(
+        User_Id = user.user_id,
+        Username = user.username,
+        User_Zodiac = user.zodiac
+    )
+    session.add(user)
     session.commit()
 
-def read_userinfo(id: int): # Read User
-    user = session.query(User).filter(User.Id == id).first()
-    
-    return([user.User_Id, user.User_Zodiac, user.Username])
-            
-def update_username(id: int, edit : str): # Update User : Username
-     
+# method for getting user information
+@app.get("/{id}")
+def read_userinfo(id: int, session = Depends(get_session)): # Read User
+    print("getting...")
+    user = session.query(User).filter(User.User_Id == id).first()
+    return(user)
+
+# method for changing/updating user information
+@app.put("/{id}/{edit}")
+def update_username(id: int, edit : str, session = Depends(get_session)): # Update User : Username
+    print("updating username...")
     user = session.query(User).filter(User.User_Id == id).first()
     session.delete(user)
     updated_userinfo = User(User_Id = user.User_Id, Username = edit, User_Zodiac = user.User_Zodiac)
@@ -68,25 +96,34 @@ def update_username(id: int, edit : str): # Update User : Username
 
     session.commit()
 
-    return([user.User_Id, user.User_Zodiac, user.Username])
+    return(user)
 
-def update_zodiac(id: int, edit : str): #update user: zodiac
-     
+# method for changing/updating user zodiac sign
+@app.patch("/{id}/{edit}")
+def update_zodiac(id: int, edit : str, session = Depends(get_session)): #update user: zodiac
+    
+    print("updating zodiac...")
     user = session.query(User).filter(User.User_Id == id).first()
     session.delete(user)
     updated_userinfo = User(User_Id = user.User_Id, Username = user.Username, User_Zodiac = edit)
     session.add(updated_userinfo)
 
     session.commit()
+    return(user)
 
-    return([user.User_Id, user.User_Zodiac, user.Username])
+# method for deleting user inforemation
+@app.delete("/{id}")
+def delete_user(id : int, session = Depends(get_session)):
+    user = session.query(User).filter(User.User_Id == id).first()
+    session.delete(user)
+    session.commit()
+    return(user)
 
+@app.get("/horoscope/{id}")
+def get_userhoroscope(id : int, session = Depends(get_session)):
+    print("horoscope...")
+    user = session.query(User).filter(User.User_Id == id).first()
 
-def get_userhoroscope(author : str):
-
-    user = session.query(User).filter(User.Username == author).first()
-
-    
     zodiac_horoscope = f"https://freehoroscopeapi.com/api/v1/get-horoscope/daily?sign={user.User_Zodiac}"
     
     h_info = requests.get(zodiac_horoscope).json()
@@ -98,7 +135,6 @@ def get_userhoroscope(author : str):
                 "Sign" : api_response.data.sign,
                 "Horoscope" : api_response.data.horoscope
                 } 
-    
     return(horoscope["Horoscope"])
             
 #-------------------------------
