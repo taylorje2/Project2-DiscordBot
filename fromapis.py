@@ -1,6 +1,7 @@
 #python -m uvicorn fromapis:app --host localhost --port 8000
 
 import requests
+from datetime import datetime
 #-----------
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import declarative_base
@@ -41,7 +42,7 @@ class APIHoroscope(BaseModel): # the response cut up into the details(what we wa
     horoscope : str
     
 
-class APIResponse(BaseModel): #this is what the api responds with
+class APIHoroscopeResponse(BaseModel): #this is what the api responds with
     data : APIHoroscope
 
 #------------------------------------
@@ -119,6 +120,8 @@ def delete_user(id : int, session = Depends(get_session)):
     session.commit()
     return(user)
 
+# -------------get horoscope-----------------------
+
 @app.get("/horoscope/{id}")
 def get_userhoroscope(id : int, session = Depends(get_session)):
     print("horoscope...")
@@ -128,15 +131,28 @@ def get_userhoroscope(id : int, session = Depends(get_session)):
     
     h_info = requests.get(zodiac_horoscope).json()
 
-    api_response = APIResponse(**h_info)
+    api_response = APIHoroscopeResponse(**h_info)
 
     horoscope = { #divides the api response
                 "Date" : api_response.data.date,
                 "Sign" : api_response.data.sign,
                 "Horoscope" : api_response.data.horoscope
                 } 
+    print(horoscope["Horoscope"])
     return(horoscope["Horoscope"])
             
+#--------get moon phase----------------
+def get_moonphase():
+    print("moon...")
+
+    moon_info = f"https://aa.usno.navy.mil/api/moon/phases/date?date={datetime.now().date()}&nump=1"
+    
+    m_info = requests.get(moon_info).json()
+    
+    return(m_info["phasedata"][0]["phase"])
+
+
+
 #-------------------------------
 
 # ---- API MODEL ----

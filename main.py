@@ -1,4 +1,5 @@
 import requests
+
 import fromapis
 import discord 
 from discord.ext import commands
@@ -78,6 +79,14 @@ async def horoscope(interaction: discord.Interaction):
 #     horoscope = fromapis.get_userhoroscope(ctx.author.id) #gets the horoscope based on the one asking for it
 #     await ctx.send(horoscope)
 
+#---------------- get moon phase -------------
+@bot.command()
+async def moon(ctx):
+    print("getting moon")
+    moon_phase = fromapis.get_moonphase()
+    await ctx.send(moon_phase)
+
+
 #------------------------- CREATE new user --------------------------
 # this method is for the "/newuser" command, which will save the user's information (id, username, and zodiac sign) into the database
 @bot.tree.command(name="newuser", description="Set up your user info with your zodiac sign")
@@ -131,6 +140,7 @@ async def getuserinfo(interaction: discord.Interaction):
         userinfo = requests.get(f"http://localhost:8000/{interaction.user.id}").json()
         # send direct message instead to server, incase the id is sensitive info
         await interaction.user.send(f"Your Id is {userinfo['User_Id']}, your username is {userinfo['Username']}, and your saved zodiac is {userinfo['User_Zodiac']}")
+        await interaction.response.send_message("User Info sent")
         # send a message in the server confirming that the user has received their information in a direct message
     except:
         await interaction.response.send_message(f"You haven't set up your user info, therefore cannot get that info :)")
@@ -180,6 +190,7 @@ async def deleteuser(ctx):
         await ctx.send(f"{user['Username']} has had their data deleted.")
     except:
         await ctx.send(f"That user hasn't set up their data, therefore nothing to delete")
+
 
 # run the bot with the token, and log handler for debugging
 bot.run(TOKEN, log_handler=handler, log_level=logging.DEBUG)

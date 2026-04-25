@@ -26,6 +26,6 @@ Repo for Project 2
 4/13/26 made code to get zodiac and the user's username to save to table in db
     *Issues*
     - When getting user_id, it gets by index number, but really want last inputs id + 1
-
+4/25/26 added moon API
 # gitignore
 4/22/26 Added discord.log, __pycache__, and .idea
