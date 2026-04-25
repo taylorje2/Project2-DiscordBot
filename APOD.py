@@ -35,36 +35,31 @@ tree = bot.tree
 
 # command for the current day's APOD (/apod)
 @bot.tree.command()
-async def apod(ctx):
-    # pleaceholder text to let the user know that data is being fetched
-    placeholder = await ctx.send("**Fetching today's APOD...**")
+async def apod(interaction: discord.Interaction):
+    # interaction defer to prevent bot timeout
+    await interaction.response.defer()
 
-    # make the bot look like it's typing
-    async with ctx.typing():
-        # parameters for the API request
-        params = {
-            "api_key": NASA_API_KEY
-        }
+    # parameters for the API request
+    params = {
+        "api_key": NASA_API_KEY
+    }
 
-        # make the API request and get the response
-        apod_response = requests.get(BASE_URL, params=params)
+    # make the API request and get the response
+    apod_response = requests.get(BASE_URL, params=params)
 
-        # check if the request was successful
-        if apod_response.status_code == 200:
-            # parse the response JSON into a nasa_apod object
-            apod_data = nasa_apod(**apod_response.json())
+    # check if the request was successful
+    if apod_response.status_code == 200:
+        # parse the response JSON into a nasa_apod object
+        apod_data = nasa_apod(**apod_response.json())
 
-            # reply to user with the APOD data in an embed message
-            await ctx.send(f"{ctx.author.mention}")
+        # create an embed message with the APOD data. Embed will have a purple sidebar
+        embed = discord.Embed(title=f"{apod_data.title}\nDate: {str(apod_data.date)}\n", description=apod_data.explanation, color=0x800080)
+        embed.set_image(url=apod_data.url)
 
-            # create an embed message with the APOD data. Embed will have a purple sidebar
-            embed = discord.Embed(title=f"{apod_data.title}\nDate: {str(apod_data.date)}\n", description=apod_data.explanation, color=0x800080)
-            embed.set_image(url=apod_data.url)
-
-            # send the embed message to the channel
-            await ctx.send(embed=embed)
-        else:
-            await ctx.send("Sorry, I couldn't fetch the APOD for today. \nPlease try again later.")
+        # send the embed message to the channel and mention the requesting user
+        await interaction.followup.send(content=interaction.user.mention, embed=embed)
+    else:
+        await interaction.followup.send("Sorry, I couldn't fetch the APOD for today. \nPlease try again later.")
 
 # command for past APOD
 @bot.tree.command()
