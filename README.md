@@ -18,13 +18,24 @@ Repo for Project 2
             added if statement for validity checking for existing user
         /getuserinfo
             added in server response, to tell user to check their private messages
-        /delete commmand
+        /updateuser
+            changed ctx to interaction command so that we can use slash commands
+            *issues*
+                add a confirm update/change prompt
+                will have to test this one with a discord name change later
+        /updatezodiac
+            changed ctx to interaction command so that we can use slash commands
+            *issues*
+                add a confirm update/change prompt
+                will have to test this one later
+        /delete
             changed ctx to interaction command so that we can use slash commands
             added in server confirmation of deletion
+            *issues*
+                add a confirm delete prompt, to make sure users are not accidentally deleted
 *ideas* 
 - once user submits information, have bot create a private channel for interactions
 - add ephemeral=True flags to make certain commands visible to only the user
-- add a confirm delete prompt, to make sure users are not accidentally deleted
 *need to do*
 - clean up main.py
 - clean up README.md
