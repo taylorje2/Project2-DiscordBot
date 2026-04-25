@@ -7,13 +7,28 @@ Repo for Project 2
 4/22/26 Added a confirmation message for backend to know whether they've successfully connected to the bot
         Added terminal debugging - the log can get a little overwhelming, but the log detects errors better
         Added greetings - so that we know the bot is acknowledging user messages
-        Fixed f-strings so that /getuserinfo and /deleteuser responds to the user
-        Fixed /setupuser command --> changed to /newuser and changed ctx interaction command so that we can use slash commands 
-        Fixed /horoscope command -->  changed ctx to interaction command so that we can use slash commands
-            *Issues*
-            - Need to throw in an if statement to handle the new users
-            - Blocked out and left the old code in case something happens and so we can keep track of the commands we've changed to and interaction, we can delete and clean it up after we get done with our bot
+        /setupuser command 
+            changed to /newuser and changed ctx interaction command so that we can use slash commands 
+        /horoscope command 
+            changed ctx to interaction command so that we can use slash commands
+        *Issues*
+        - Blocked out and left the old code in case something happens and so we can keep track of the commands we've changed to and interaction, we can delete and clean it up after we get done with our bot
 4/23/26 Fixed /getuserinfo
+4/25/25 /horoscope 
+            added if statement for validity checking for existing user
+        /getuserinfo
+            added in server response, to tell user to check their private messages
+        /delete commmand
+            changed ctx to interaction command so that we can use slash commands
+            added in server confirmation of deletion
+*ideas* 
+- once user submits information, have bot create a private channel for interactions
+- add ephemeral=True flags to make certain commands visible to only the user
+- add a confirm delete prompt, to make sure users are not accidentally deleted
+*need to do*
+- clean up main.py
+- clean up README.md
+
 
 
 # zodiac.py
