@@ -3,6 +3,7 @@ import requests
 import fromapis
 import discord 
 from discord.ext import commands
+from discord import app_commands
 import logging
 import os
 from dotenv import load_dotenv
@@ -116,8 +117,6 @@ async def newUser(interaction: discord.Interaction, zodiac: str):
                 "zodiac" : zodiac
             }
 
-# IF WE HAVE TIME TRY TO HAVE BOT CREATE A NEW PRIVATE CHANNEL ONCE USER HAS SUBMITTED THEIR INFO
-
 # @bot.command()
 # async def setupuser(ctx, *, zodiac):
 #     zodiac = zodiac.lower()
@@ -146,7 +145,7 @@ async def getuserinfo(interaction: discord.Interaction):
         # send a message in the server confirming that the user has received their information in a direct message
         await interaction.response.send_message("User information has been sent to your direct messages")
     except:
-        await interaction.response.send_message(f"You haven't set up your user info, therefore cannot get that info :)")
+        await interaction.response.send_message(f"User does not exist, please create new user")
 
 # # method for getting user information
 # @bot.command()
@@ -158,32 +157,50 @@ async def getuserinfo(interaction: discord.Interaction):
 #     except:
 #         await ctx.send(f"You haven't set up your user info, therefore cannot get that info :)")
 
-# methods for changing/updating user information
-@bot.command()
-async def changeusername(ctx, *, username):
-    try:
-        userinfo = requests.put(f"http://localhost:8000/{ctx.author.id}/{username}").json()
-        await ctx.author.send(f"Your Id is {userinfo['User_Id']}, your username is {username} , and your saved zodiac is {userinfo['User_Zodiac']}")
-        await ctx.send(f"{userinfo['Username']} has changed their username to {username}!")
+#-------------------------- UPDATE username --------------------------
+@bot.tree.command(name="updateusername", description="update username")
+async def changeusername(interaction: discord.Interaction):
+    # username in db should reflect that of their discord
+    discordusername = interaction.user.name
+    
+    userinfo = requests.put(f"http://localhost:8000/{interaction.user.id}/{discordusername}")
 
-    except:
-        await ctx.send(f"You haven't set up your user info, therefore cannot update that info :)")
+    if userinfo.status_code == 200:
+        await interaction.user.send(f"You've changed your discord name, it is now {discordusername}, updated in your horoscope profile.")
+        await interaction.response.send_message(f"{discordusername} has been updated")
+    else:
+        await interaction.response.send_message("User does not exist, please create a new user")
 
+# @bot.command()
+# async def changeusername(ctx, *, username):
+#     try:
+#         userinfo = requests.put(f"http://localhost:8000/{ctx.author.id}/{username}").json()
+#         await ctx.author.send(f"Your Id is {userinfo['User_Id']}, your username is {username} , and your saved zodiac is {userinfo['User_Zodiac']}")
+#         await ctx.send(f"{userinfo['Username']} has changed their username to {username}!")
+
+#     except:
+#         await ctx.send(f"You haven't set up your user info, therefore cannot update that info :)")
+
+#-------------------------- UPDATE user zodiac --------------------------
 # method for changing/updating user zodiac sign
-@bot.command()
-async def changezodiac(ctx, *, zodiac):
-    try:
+@bot.tree.command(name="updateuserzodiac", description="update zodiac sign")
+async def changezodiac(interaction: discord.Interaction):
+    userinfo = requests.get(f"http://localhost:8000/{interaction.user.id}").json()
+    if userinfo == None:
+        await interaction.response.send_message("User does not exist, pease create a new user")
+    else:
         zodiac = zodiac.lower() 
+        valid = ["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"]
 
-        if zodiac != "aries" and zodiac != "taurus" and zodiac != "gemini" and zodiac != "cancer" and zodiac != "leo" and zodiac != "virgo" and zodiac != "libra" and zodiac != "scorpio" and zodiac != "sagittarius" and zodiac != "capricorn" and zodiac != "aquarius" and zodiac != "pisces":
-            await ctx.send(f"{zodiac} is not a zodiac")
+        if zodiac not in valid:
+            await interaction.response.send_message(f"{zodiac} is not a zodiac")
         else:
-            userinfo = requests.patch(f"http://localhost:8000/{ctx.author.id}/{zodiac}").json()
-            await ctx.author.send(f"Your Id is {userinfo['User_Id']}, your username is {userinfo['Username']} , and your saved zodiac is {zodiac}")
-            await ctx.send(f"{userinfo['Username']} has changed their zodiac to {zodiac}!")
-
-    except:
-        await ctx.send(f"You haven't set up your user info, therefore cannot update that info :)")
+            userinfo = requests.patch(f"http://localhost:8000/{interaction.user.id}/{zodiac}").json()
+            if userinfo.status_code == 200:
+                await interaction.user.send(f"Your Id is {userinfo['User_Id']}, your username is {userinfo['Username']} , and your saved zodiac is {zodiac}")
+                await interaction.response.send_message(f"{userinfo['Username']} has changed their zodiac to {zodiac}!")
+            else:
+                await interaction.send("User does not exist, pease create a new user")
 
 #-------------------------- DELETE user --------------------------
 @bot.tree.command(name="delete", description="Delete user")
@@ -193,7 +210,7 @@ async def deleteuser(interaction: discord.interactions):
         await interaction.user.send(f"{user['Username']} deleted")
         await interaction.response.send_message(f"{user['Username']} deleted")
     except:
-        await interaction.user.send(f"User does not exist, unable to delete")
+        await interaction.response.send_message(f"User does not exist, unable to delete")
         
 # # method for deleting user
 # @bot.command()
