@@ -208,6 +208,7 @@ async def changezodiac(interaction: discord.Interaction, zodiac: str):
                 await interaction.response.send_message("User does not exist, please create a new user")
 
 #-------------------------- DELETE user --------------------------
+# method for "/delete" command, which deletes the user in the database
 @bot.tree.command(name="delete", description="Delete user")
 async def deleteuser(interaction: discord.Interaction):
     try:

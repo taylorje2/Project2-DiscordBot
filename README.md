@@ -2,6 +2,54 @@
 Moon/Horoscope/APOD
 Repo for Project 2
 
+# Description
+
+# Features
+
+# Setup Instructions
+
+# Commands
+/help - shows available commands
+
+/horoscope - shows daily horoscope
+
+/moon - shows daily moon phase
+
+/newuser - shows
+
+/getuserinfo
+
+/updateusername
+
+/updateuserzodiac
+
+/delete
+
+/apod
+
+/oldapod
+
+# Code Overview
+ProjectTwo.db
+Relational database that interacts with the bot to hold and retrieve user information. Upon new user creation, a database entry is created for the user, which includes the users username and user inputed zodiac sign, and auto generated user Id number. Database will also reflect all CRUD operations.
+
+main.py
+
+APOD.py
+
+confirm.py
+
+fromapis.py
+
+
+# Notes
+
+# Developers
+Rachel Smith
+Jayden Taylor
+Terysa Brewer
+
+
 # main.py
 4/13/26 Made env file complete with token
 4/22/26 Added a confirmation message for backend to know whether they've successfully connected to the bot
@@ -41,8 +89,7 @@ Repo for Project 2
 - clean up README.md
 - add a "/help" command, and inform new users about help command
 
-# ProjectTwo.db
-Relational database that interacts with the bot to hold and retrieve user information. Upon new user creation, a database entry is created for the user, which includes the users username and user inputed zodiac sign, and auto generated user Id number. Database will also reflect all CRUD operations.
+
 
 # fromapis.py
 4/13/26 made code to get zodiac and the user's username to save to table in db
