@@ -24,6 +24,8 @@ handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w'
 intents = discord.Intents.default()
 intents.message_content = True # allows bot to send message
 
+# allows bot access to server member data
+intents.members = True
 
 bot = commands.Bot(command_prefix='/', intents=intents)
 #^any commands sent bot start with '/', for instance '/horoscope'
