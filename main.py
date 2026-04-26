@@ -159,25 +159,27 @@ async def changeusername(interaction: discord.Interaction):
         await interaction.response.send_message("User does not exist, please create a new user")
 
 #-------------------------- UPDATE user zodiac --------------------------
-# method for changing/updating user zodiac sign
 @bot.tree.command(name="updateuserzodiac", description="update zodiac sign")
-async def changezodiac(interaction: discord.Interaction):
+async def changezodiac(interaction: discord.Interaction, zodiac: str):
     userinfo = requests.get(f"http://localhost:8000/{interaction.user.id}").json()
-    if userinfo == None:
+    if not userinfo:
         await interaction.response.send_message("User does not exist, pease create a new user")
+        return
     else:
         zodiac = zodiac.lower() 
         valid = ["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"]
 
         if zodiac not in valid:
             await interaction.response.send_message(f"{zodiac} is not a zodiac")
-        else:
-            userinfo = requests.patch(f"http://localhost:8000/{interaction.user.id}/{zodiac}").json()
-            if userinfo.status_code == 200:
+
+        userinfovalid = requests.patch(f"http://localhost:8000/{interaction.user.id}/{zodiac}")
+
+        if userinfovalid.status_code == 200:
+                updateduserinfo = userinfovalid.json()
                 await interaction.user.send(f"Your Id is {userinfo['User_Id']}, your username is {userinfo['Username']} , and your saved zodiac is {zodiac}")
                 await interaction.response.send_message(f"{userinfo['Username']} has changed their zodiac to {zodiac}!")
-            else:
-                await interaction.send("User does not exist, please create a new user")
+        else:
+                await interaction.response.send_message("User does not exist, please create a new user")
 
 #-------------------------- DELETE user --------------------------
 @bot.tree.command(name="delete", description="Delete user")
