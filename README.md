@@ -2,6 +2,42 @@
 Moon/Horoscope/APOD
 Repo for Project 2
 
+# Description
+
+# Features
+
+# Setup Instructions
+
+# Commands
+/horoscope
+/mooon
+/newuser
+/getuserinfo
+/updateusername
+/updateuserzodiac
+/delete
+
+
+# Code Overview
+projectTwo.db
+
+main.py
+
+APOD.py
+
+confirm.py
+
+fromapis.py
+
+
+# Notes
+
+# Developers
+Rachel Smith
+Jayden Taylor
+Terysa Brewer
+
+
 # main.py
 4/13/26 Made env file complete with token
 4/22/26 Added a confirmation message for backend to know whether they've successfully connected to the bot
