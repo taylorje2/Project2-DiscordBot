@@ -195,12 +195,10 @@ async def deleteuser(interaction: discord.interactions):
     except:
         await interaction.response.send_message(f"User does not exist, unable to delete")
 
+# ================================================
+# ------------- APOD COMMANDS --------------------
+# ================================================
 
 
 # run the bot with the token, and log handler for debugging
 bot.run(TOKEN, log_handler=handler, log_level=logging.DEBUG)
-
-
-
-
-
