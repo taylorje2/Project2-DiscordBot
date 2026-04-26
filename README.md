@@ -7,12 +7,10 @@ Repo for Project 2
 4/22/26 Added a confirmation message for backend to know whether they've successfully connected to the bot
         Added terminal debugging - the log can get a little overwhelming, but the log detects errors better
         Added greetings - so that we know the bot is acknowledging user messages
-        /setupuser command 
+        /setupuser 
             changed to /newuser and changed ctx interaction command so that we can use slash commands 
-        /horoscope command 
+        /horoscope 
             changed ctx to interaction command so that we can use slash commands
-        *Issues*
-        - Blocked out and left the old code in case something happens and so we can keep track of the commands we've changed to and interaction, we can delete and clean it up after we get done with our bot
 4/23/26 Fixed /getuserinfo
 4/25/25 /horoscope 
             added if statement for validity checking for existing user
@@ -40,17 +38,19 @@ Repo for Project 2
 *need to do*
 - clean up README.md
 - merge Jaydens branch to main branch
+- add a "/help" command, and inform new users about help command
 
-# zodiac.py
-4/15/26 removed, no longer needed - info is in the main.py
-
-# Horoscope.sql --> Horoscope.sqlite
-4/21/26 removed - we decided to not do this anymore
+# ProjectTwo.db
+Relational database that interacts with the bot to hold and retrieve user information. Upon new user creation, a database entry is created for the user, which includes the users username and user inputed zodiac sign, and auto generated user Id number. Database will also reflect all CRUD operations.
 
 # fromapis.py
 4/13/26 made code to get zodiac and the user's username to save to table in db
     *Issues*
     - When getting user_id, it gets by index number, but really want last inputs id + 1
 4/25/26 added moon API
+
+# confirm.py
+Button that give users the opportunity to confirm their inputs before submitting
+
 # gitignore
 4/22/26 Added discord.log, __pycache__, and .idea
