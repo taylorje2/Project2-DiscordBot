@@ -12,6 +12,11 @@ from dotenv import load_dotenv
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
+# APOD API key variable and BASE_URL
+NASA_API_KEY = os.getenv("APOD_API_KEY")
+
+BASE_URL = "https://api.nasa.gov/planetary/apod"
+
 #--------------------------
 # writes ALL activity into discord.log file (for debug)
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w') 

@@ -155,8 +155,9 @@ def get_moonphase():
 
 #-------------------------------
 
+# ====================================
 # ---- NASA APOD API MODEL ----
-
+# ====================================
 class nasa_apod(BaseModel):
     # date for the APOD
     date: str
