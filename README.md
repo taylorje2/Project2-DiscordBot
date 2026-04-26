@@ -16,7 +16,8 @@ Repo for Project 2
 /updateusername
 /updateuserzodiac
 /delete
-
+/apod
+/oldapod
 
 # Code Overview
 projectTwo.db
