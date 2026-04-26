@@ -7,14 +7,39 @@ Repo for Project 2
 4/22/26 Added a confirmation message for backend to know whether they've successfully connected to the bot
         Added terminal debugging - the log can get a little overwhelming, but the log detects errors better
         Added greetings - so that we know the bot is acknowledging user messages
-        Fixed f-strings so that /getuserinfo and /deleteuser responds to the user
-        Fixed /setupuser command --> changed to /newuser and changed ctx interaction command so that we can use slash commands 
-        Fixed /horoscope command -->  changed ctx to interaction command so that we can use slash commands
-            *Issues*
-            - Need to throw in an if statement to handle the new users
-            - Blocked out and left the old code in case something happens and so we can keep track of the commands we've changed to and interaction, we can delete and clean it up after we get done with our bot
+        /setupuser command 
+            changed to /newuser and changed ctx interaction command so that we can use slash commands 
+        /horoscope command 
+            changed ctx to interaction command so that we can use slash commands
+        *Issues*
+        - Blocked out and left the old code in case something happens and so we can keep track of the commands we've changed to and interaction, we can delete and clean it up after we get done with our bot
 4/23/26 Fixed /getuserinfo
-
+4/25/25 /horoscope 
+            added if statement for validity checking for existing user
+        /getuserinfo
+            added in server response, to tell user to check their private messages
+        /updateuser
+            changed ctx to interaction command so that we can use slash commands
+            *issues*
+                add a confirm update/change prompt
+                add comments
+        /updatezodiac
+            changed ctx to interaction command so that we can use slash commands
+            *issues*
+                add a confirm update/change prompt
+                add comments
+        /delete
+            changed ctx to interaction command so that we can use slash commands
+            added in server confirmation of deletion
+            *issues*
+                add a confirm delete prompt, to make sure users are not accidentally deleted
+                add comments
+*ideas* 
+- once user submits information, have bot create a private channel for interactions
+- add ephemeral=True flags to make certain commands visible to only the user
+*need to do*
+- clean up README.md
+- merge Jaydens branch to main branch
 
 # zodiac.py
 4/15/26 removed, no longer needed - info is in the main.py
@@ -26,6 +51,6 @@ Repo for Project 2
 4/13/26 made code to get zodiac and the user's username to save to table in db
     *Issues*
     - When getting user_id, it gets by index number, but really want last inputs id + 1
-
+4/25/26 added moon API
 # gitignore
 4/22/26 Added discord.log, __pycache__, and .idea
