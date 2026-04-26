@@ -116,7 +116,7 @@ async def moon(interaction: discord.Interaction):
     # Passed validation, sends a followup message with users horoscope
     await interaction.followup.send(embed=embed)
 
-    await interaction.followup.send("An error has occurred trying to retrieve the moon phase, please try again later.")
+    # await interaction.followup.send("An error has occurred trying to retrieve the moon phase, please try again later.")
 
 
 #------------------------- CREATE new user --------------------------
