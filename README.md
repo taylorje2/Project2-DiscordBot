@@ -9,9 +9,10 @@ Repo for Project 2
 # Setup Instructions
 
 # Commands
-/horoscope
-/mooon
-/newuser
+/help - shows available commands
+/horoscope - shows daily horoscope
+/moon - shows daily moon phase
+/newuser - shows
 /getuserinfo
 /updateusername
 /updateuserzodiac
@@ -20,7 +21,8 @@ Repo for Project 2
 /oldapod
 
 # Code Overview
-projectTwo.db
+# ProjectTwo.db
+Relational database that interacts with the bot to hold and retrieve user information. Upon new user creation, a database entry is created for the user, which includes the users username and user inputed zodiac sign, and auto generated user Id number. Database will also reflect all CRUD operations.
 
 main.py
 
@@ -78,8 +80,7 @@ Terysa Brewer
 - clean up README.md
 - add a "/help" command, and inform new users about help command
 
-# ProjectTwo.db
-Relational database that interacts with the bot to hold and retrieve user information. Upon new user creation, a database entry is created for the user, which includes the users username and user inputed zodiac sign, and auto generated user Id number. Database will also reflect all CRUD operations.
+
 
 # fromapis.py
 4/13/26 made code to get zodiac and the user's username to save to table in db
