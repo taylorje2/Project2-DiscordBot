@@ -90,3 +90,12 @@ async def oldapod(interaction: discord.Interaction, date: str = None):
     else:
         await interaction.followup.send(f"Sorry, I couldn't fetch the APOD for {str(apod_data.date)}. \nPlease try again later.")
 
+# makes sure the bot is running and prints a message in the terminal when it is ready 
+@bot.event
+async def on_ready():
+    # syncs the command list to the bot 
+    await bot.tree.sync()
+    print(f"Logged in as {bot.user.name}")
+
+# run the bot
+bot.run(TOKEN2, log_handler=handler, log_level=logging.INFO)
