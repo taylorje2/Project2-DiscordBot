@@ -1,9 +1,9 @@
 import requests
-
 import fromapis
 import discord 
 from discord.ext import commands
 from discord import app_commands
+from confirm import Confirm
 import logging
 import os
 from dotenv import load_dotenv
@@ -28,11 +28,18 @@ intents.message_content = True # allows bot to send message
 bot = commands.Bot(command_prefix='/', intents=intents)
 
 #^any commands sent bot start with '/', for instance '/horoscope'
+tree = bot.tree
 
 
 #--------------------------
 # DEBUGGING METHODS
 #--------------------------
+
+# syncs tree commands
+async def setup_hook():
+    await bot.tree.sync()
+bot.setup_hook = setup_hook
+
 # when the bot is ready, it will print this message in the terminal
 @bot.event
 async def on_ready():
@@ -43,19 +50,14 @@ async def on_ready():
 @bot.event 
 async def on_message(message):
     # if the message is from the bot, ignore it
-    if message.author == bot.user: 
+    if message.author.bot: 
+    # if message.author == bot.user: 
         return
     print ("USER MESSAGE:", message.content) 
     # if the message is a greeting, respond with a greeting
     if message.content.lower().strip() in ("hello", "hi", "hey"): 
         await message.channel.send("Hello!")
     await bot.process_commands(message) 
-
-# when an error occurs with a command, it will print the error in the terminal
-@bot.event
-async def on_app_command_error(ctx, error):
-    logging.exception("An error occurred")
-    print (f"[ERROR] An error occurred: {error}")
 
 # this is for catching any errors that occur with the bot
 @bot.tree.error
@@ -89,7 +91,7 @@ async def horoscope(interaction: discord.Interaction):
 @bot.tree.command(name="moon", description="Get Today's Moon Phase")
 async def moon(interaction: discord.Interaction):
     await interaction.response.send_message("Getting moon phase...")
-    
+
     moon_phase = fromapis.get_moonphase()
 
     if moon_phase == "Full Moon":
@@ -109,6 +111,9 @@ async def moon(interaction: discord.Interaction):
 
     # Passed validation, sends a followup message with users horoscope
     await interaction.followup.send(embed=embed)
+
+    await interaction.followup.send("An error has occurred trying to retrieve the moon phase, please try again later.")
+
 
 
 #------------------------- CREATE new user --------------------------
@@ -151,7 +156,7 @@ async def getuserinfo(interaction: discord.Interaction):
         await interaction.response.send_message(f"User does not exist, please create new user")
 
 #-------------------------- UPDATE username --------------------------
-@bot.tree.command(name="updateusername", description="update username")
+@bot.tree.command(name="updateusername", description="if you've recently changed your username on discord, please use to command to update our records")
 async def changeusername(interaction: discord.Interaction):
     # username in db should reflect that of their discord
     discordusername = interaction.user.name
@@ -189,73 +194,31 @@ async def changezodiac(interaction: discord.Interaction, zodiac: str):
 
 #-------------------------- DELETE user --------------------------
 @bot.tree.command(name="delete", description="Delete user")
-async def deleteuser(interaction: discord.interactions):
+async def deleteuser(interaction: discord.Interaction):
     try:
-        user = requests.delete(f"http://localhost:8000/{interaction.user.id}").json()
-        await interaction.user.send(f"{user['Username']} deleted")
-        await interaction.response.send_message(f"{user['Username']} deleted")
+        # check to see if user exists first, retrieve user information
+        userinfo = requests.get(f"http://localhost:8000/{interaction.user.id}").json()
+        # response message to user if information does not exist
+        if not userinfo:
+            await interaction.response.send_message("User does not exist, pease create a new user", ephemeral=True)
+            return
+        # ask user for confirmation before deleting
+        confirmdelete = Confirm()
+        await interaction.response.send_message("\u2757 Are you sure you want to delete your profile?", view=confirmdelete, ephemeral=True)
+        await confirmdelete.wait()
+        # cancel delete
+        if not confirmdelete.value:
+            await interaction.followup.send(f"\u274C {userinfo['Username']} cancelled delete", ephemeral=True)  
+            return
+        # delete user after confirmation
+        userdelete = requests.delete(f"http://localhost:8000/{interaction.user.id}")
+        if userdelete.status_code == 200:
+            await interaction.followup.send(f"\u2705 {userinfo['Username']} deleted", ephemeral=True)
+        # 
+        else:
+            await interaction.followup.send("unable to delete user, try again later", ephemeral=True)           
     except:
-        await interaction.response.send_message(f"User does not exist, unable to delete")
-
-# ================================================
-# ------------- APOD COMMANDS --------------------
-# ================================================
-# command for the current day's APOD (/apod)
-@bot.tree.command(name="apod", description="Get the NASA APOD for today")
-async def apod(interaction: discord.Interaction):
-    # interaction defer to prevent bot timeout
-    await interaction.response.defer()
-
-    # parameters for the API request
-    params = {
-        "api_key": NASA_API_KEY
-    }
-
-    # make the API request and get the response
-    apod_response = requests.get(BASE_URL, params=params)
-
-    # check if the request was successful
-    if apod_response.status_code == 200:
-        # parse the response JSON into a nasa_apod object
-        apod_data = fromapis.nasa_apod(**apod_response.json())
-
-        # create an embed message with the APOD data. Embed will have a purple sidebar
-        embed = discord.Embed(title=f"{apod_data.title}\nDate: {str(apod_data.date)}\n", description=apod_data.explanation, color=0x800080)
-        embed.set_image(url=apod_data.url)
-
-        # send the embed message to the channel and mention the requesting user
-        await interaction.followup.send(content=interaction.user.mention, embed=embed)
-    else:
-        await interaction.followup.send("Sorry, I couldn't fetch the APOD for today. \nPlease try again later.")
-
-# command for past APOD
-@bot.tree.command(name="oldapod", description="Get the NASA APOD for a past date")
-async def oldapod(interaction: discord.Interaction, date: str = None):
-    # interaction defer to prevent bot timeout
-    await interaction.response.defer()
-
-    # parameters for the API request
-    params = {
-        "api_key": NASA_API_KEY,
-        "date": date
-    }
-
-    # API request
-    apod_response = requests.get(BASE_URL, params=params)
-
-    # check if the response was successful
-    if apod_response.status_code == 200:
-        # parse the response JSON into a nasa_apod object
-        apod_data = fromapis.nasa_apod(**apod_response.json())
-
-        # create an embed message with the APOD data. embed will have a purple sidebar
-        embed = discord.Embed(title=f"{apod_data.title}\nDate: {str(apod_data.date)}\n", description=apod_data.explanation, color=0x800080)
-        embed.set_image(url=apod_data.url)
-
-        # send the embed message to the channel
-        await interaction.followup.send(content=interaction.user.mention, embed=embed)
-    else:
-        await interaction.followup.send(f"Sorry, I couldn't fetch the APOD for {str(apod_data.date)}. \nPlease try again later.")
+        await interaction.response.send_message(f"An error occurred, please try again later", ephemeral=True)
 
 # run the bot with the token, and log handler for debugging
 bot.run(TOKEN, log_handler=handler, log_level=logging.DEBUG)
