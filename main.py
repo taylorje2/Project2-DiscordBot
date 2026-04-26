@@ -90,7 +90,21 @@ async def horoscope(interaction: discord.Interaction):
 async def moon(ctx):
     print("getting moon")
     moon_phase = fromapis.get_moonphase()
-    await ctx.send(moon_phase)
+    if moon_phase == "Full Moon":
+        title = "Full Moon"
+        desc = "Today's Moon Phase is a Full Moon!"
+        image_url = "https://d.newsweek.com/en/full/2161840/mars-passes-behind-moon.jpg?w=400&e=26926b6b37936c72a323f780c2130e27"
+    elif moon_phase == "First Quarter":
+        title = "First Quarter"
+        desc = "Today's Moon Phase is a First Quarter!"
+        image_url = "https://media.istockphoto.com/id/1292676775/photo/first-quarter-moon-also-called-a-half-moon-since-we-see-exactly-50-of-the-moons-visible.jpg?s=170667a&w=0&k=20&c=Kdl0KD0DOOLWlMNec1qn0sfKHnDYRAIAqde859zhMOo="
+    else:
+        title = "Lase Quarter"
+        desc = "Today's Moon Phase is a Lase Quarter!"
+        image_url = "https://science.nasa.gov/wp-content/uploads/2023/08/third-quarter.jpg"
+    embed = discord.Embed(title=title, description= desc)
+    embed.set_image(url=image_url)
+    await ctx.send(embed= embed)
 
 
 #------------------------- CREATE new user --------------------------
