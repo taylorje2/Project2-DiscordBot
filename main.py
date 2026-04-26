@@ -21,7 +21,8 @@ BASE_URL = "https://api.nasa.gov/planetary/apod"
 # writes ALL activity into discord.log file (for debug)
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w') 
 
-intents = discord.Intents.default()
+# intents = discord.Intents.default() --- original
+intents = discord.Intents.all()
 intents.message_content = True # allows bot to send message
 
 # allows bot access to server member data
