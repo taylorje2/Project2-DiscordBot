@@ -80,10 +80,13 @@ async def horoscope(interaction: discord.Interaction):
         await interaction.followup.send("User does not exist, unable to retrieve horoscope")
 
 #---------------- get moon phase -------------
-@bot.command()
-async def moon(ctx):
-    print("getting moon")
+@bot.tree.command(name="moon", description="Get Today's Moon Phase")
+async def moon(interaction: discord.Interaction):
+    await interaction.response.send_message("Getting moon phase...")
+    
     moon_phase = fromapis.get_moonphase()
+
+    print("getting moon")
     if moon_phase == "Full Moon":
         title = "Full Moon"
         desc = "Today's Moon Phase is a Full Moon!"
@@ -98,7 +101,9 @@ async def moon(ctx):
         image_url = "https://science.nasa.gov/wp-content/uploads/2023/08/third-quarter.jpg"
     embed = discord.Embed(title=title, description= desc)
     embed.set_image(url=image_url)
-    await ctx.send(embed= embed)
+
+    # Passed validation, sends a followup message with users horoscope
+    await interaction.followup.send(embed=embed)
 
 
 #------------------------- CREATE new user --------------------------
