@@ -86,7 +86,6 @@ async def moon(interaction: discord.Interaction):
     
     moon_phase = fromapis.get_moonphase()
 
-    print("getting moon")
     if moon_phase == "Full Moon":
         title = "Full Moon"
         desc = "Today's Moon Phase is a Full Moon!"
