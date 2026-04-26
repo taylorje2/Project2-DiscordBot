@@ -22,25 +22,23 @@ Repo for Project 2
             changed ctx to interaction command so that we can use slash commands
             *issues*
                 add a confirm update/change prompt
-                will have to test this one with a discord name change later
+                add comments
         /updatezodiac
             changed ctx to interaction command so that we can use slash commands
             *issues*
                 add a confirm update/change prompt
-                will have to test this one later
+                add comments
         /delete
             changed ctx to interaction command so that we can use slash commands
             added in server confirmation of deletion
             *issues*
                 add a confirm delete prompt, to make sure users are not accidentally deleted
+                add comments
 *ideas* 
 - once user submits information, have bot create a private channel for interactions
 - add ephemeral=True flags to make certain commands visible to only the user
 *need to do*
-- clean up main.py
 - clean up README.md
-
-
 
 # zodiac.py
 4/15/26 removed, no longer needed - info is in the main.py
