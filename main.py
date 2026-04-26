@@ -26,7 +26,10 @@ intents.message_content = True # allows bot to send message
 
 
 bot = commands.Bot(command_prefix='/', intents=intents)
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 5569d1a (Added the bot tree for commands list)
 #^any commands sent bot start with '/', for instance '/horoscope'
 tree = bot.tree
 
