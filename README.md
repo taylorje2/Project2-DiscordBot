@@ -39,6 +39,7 @@ Repo for Project 2
 - add ephemeral=True flags to make certain commands visible to only the user
 *need to do*
 - clean up README.md
+- merge Jaydens branch to main branch
 
 # zodiac.py
 4/15/26 removed, no longer needed - info is in the main.py
