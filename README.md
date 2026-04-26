@@ -21,7 +21,7 @@ Repo for Project 2
 /oldapod
 
 # Code Overview
-# ProjectTwo.db
+ProjectTwo.db
 Relational database that interacts with the bot to hold and retrieve user information. Upon new user creation, a database entry is created for the user, which includes the users username and user inputed zodiac sign, and auto generated user Id number. Database will also reflect all CRUD operations.
 
 main.py
