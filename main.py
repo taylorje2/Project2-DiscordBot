@@ -27,9 +27,6 @@ intents.message_content = True # allows bot to send message
 
 bot = commands.Bot(command_prefix='/', intents=intents)
 
-# command list tree (shows a list of bot commands when "/" is entered)
-tree = bot.tree
-
 #^any commands sent bot start with '/', for instance '/horoscope'
 
 
@@ -203,7 +200,33 @@ async def deleteuser(interaction: discord.interactions):
 # ================================================
 # ------------- APOD COMMANDS --------------------
 # ================================================
+# command for the current day's APOD (/apod)
+@bot.tree.command(name="apod", description="Get the NASA APOD for today")
+async def apod(interaction: discord.Interaction):
+    # interaction defer to prevent bot timeout
+    await interaction.response.defer()
 
+    # parameters for the API request
+    params = {
+        "api_key": NASA_API_KEY
+    }
+
+    # make the API request and get the response
+    apod_response = requests.get(BASE_URL, params=params)
+
+    # check if the request was successful
+    if apod_response.status_code == 200:
+        # parse the response JSON into a nasa_apod object
+        apod_data = fromapis.nasa_apod(**apod_response.json())
+
+        # create an embed message with the APOD data. Embed will have a purple sidebar
+        embed = discord.Embed(title=f"{apod_data.title}\nDate: {str(apod_data.date)}\n", description=apod_data.explanation, color=0x800080)
+        embed.set_image(url=apod_data.url)
+
+        # send the embed message to the channel and mention the requesting user
+        await interaction.followup.send(content=interaction.user.mention, embed=embed)
+    else:
+        await interaction.followup.send("Sorry, I couldn't fetch the APOD for today. \nPlease try again later.")
 
 # run the bot with the token, and log handler for debugging
 bot.run(TOKEN, log_handler=handler, log_level=logging.DEBUG)
