@@ -79,12 +79,6 @@ async def horoscope(interaction: discord.Interaction):
         # FAILED validation, sends a message informing user that their info is not saved
         await interaction.followup.send("User does not exist, unable to retrieve horoscope")
 
-
-# @bot.command()
-# async def horoscope(ctx): #when the user does "/horoscope this method happens"
-#     horoscope = fromapis.get_userhoroscope(ctx.author.id) #gets the horoscope based on the one asking for it
-#     await ctx.send(horoscope)
-
 #---------------- get moon phase -------------
 @bot.command()
 async def moon(ctx):
@@ -130,21 +124,8 @@ async def newUser(interaction: discord.Interaction, zodiac: str):
                 "username" : interaction.user.name,
                 "zodiac" : zodiac
             }
-
-# @bot.command()
-# async def setupuser(ctx, *, zodiac):
-#     zodiac = zodiac.lower()
-#     if zodiac != "aries" and zodiac != "taurus" and zodiac != "gemini" and zodiac != "cancer" and zodiac != "leo" and zodiac != "virgo" and zodiac != "libra" and zodiac != "scorpio" and zodiac != "sagittarius" and zodiac != "capricorn" and zodiac != "aquarius" and zodiac != "pisces":
-#         await ctx.send(f"{zodiac} is not a zodiac")
-#     else:
-#         await ctx.send(f"Your saved zodiac is {zodiac}")
-#         user = {
-#             "user_id" : ctx.author.id,
-#             "username" :ctx.author.name,
-#             "zodiac" : zodiac
-#         }
         
-        requests.post("http://localhost:8000/", json=user)
+            requests.post("http://localhost:8000/", json=user)
         
 #-------------------------- GET user information --------------------------
 # this method is for the "/getuserinfo" command, which will get the user's information (id, username, and zodiac sign) from the database and send it to the user in a direct message
@@ -155,21 +136,9 @@ async def getuserinfo(interaction: discord.Interaction):
         userinfo = requests.get(f"http://localhost:8000/{interaction.user.id}").json()
         # send direct message instead to server, incase the id is sensitive info
         await interaction.user.send(f"Your Id is {userinfo['User_Id']}, your username is {userinfo['Username']}, and your saved zodiac is {userinfo['User_Zodiac']}")
-        await interaction.response.send_message("User Info sent")
-        # send a message in the server confirming that the user has received their information in a direct message
         await interaction.response.send_message("User information has been sent to your direct messages")
     except:
         await interaction.response.send_message(f"User does not exist, please create new user")
-
-# # method for getting user information
-# @bot.command()
-# async def getuserinfo(ctx):
-#     try:
-#         userinfo = requests.get(f"http://localhost:8000/{ctx.author.id}").json()
-#         await ctx.author.send(f"Your Id is {userinfo['User_Id']}, your username is {userinfo['Username']}, and your saved zodiac is {userinfo['User_Zodiac']}")
-#         # ^ send direct message instead to server, incase the id is sensitive info
-#     except:
-#         await ctx.send(f"You haven't set up your user info, therefore cannot get that info :)")
 
 #-------------------------- UPDATE username --------------------------
 @bot.tree.command(name="updateusername", description="update username")
@@ -184,16 +153,6 @@ async def changeusername(interaction: discord.Interaction):
         await interaction.response.send_message(f"{discordusername} has been updated")
     else:
         await interaction.response.send_message("User does not exist, please create a new user")
-
-# @bot.command()
-# async def changeusername(ctx, *, username):
-#     try:
-#         userinfo = requests.put(f"http://localhost:8000/{ctx.author.id}/{username}").json()
-#         await ctx.author.send(f"Your Id is {userinfo['User_Id']}, your username is {username} , and your saved zodiac is {userinfo['User_Zodiac']}")
-#         await ctx.send(f"{userinfo['Username']} has changed their username to {username}!")
-
-#     except:
-#         await ctx.send(f"You haven't set up your user info, therefore cannot update that info :)")
 
 #-------------------------- UPDATE user zodiac --------------------------
 # method for changing/updating user zodiac sign
@@ -214,22 +173,7 @@ async def changezodiac(interaction: discord.Interaction):
                 await interaction.user.send(f"Your Id is {userinfo['User_Id']}, your username is {userinfo['Username']} , and your saved zodiac is {zodiac}")
                 await interaction.response.send_message(f"{userinfo['Username']} has changed their zodiac to {zodiac}!")
             else:
-                await interaction.send("User does not exist, pease create a new user")
-
-# @bot.command()
-# async def changezodiac(ctx, *, zodiac):
-#     try:
-#         zodiac = zodiac.lower() 
-
-#         if zodiac != "aries" and zodiac != "taurus" and zodiac != "gemini" and zodiac != "cancer" and zodiac != "leo" and zodiac != "virgo" and zodiac != "libra" and zodiac != "scorpio" and zodiac != "sagittarius" and zodiac != "capricorn" and zodiac != "aquarius" and zodiac != "pisces":
-#             await ctx.send(f"{zodiac} is not a zodiac")
-#         else:
-#             userinfo = requests.patch(f"http://localhost:8000/{ctx.author.id}/{zodiac}").json()
-#             await ctx.author.send(f"Your Id is {userinfo['User_Id']}, your username is {userinfo['Username']} , and your saved zodiac is {zodiac}")
-#             await ctx.send(f"{userinfo['Username']} has changed their zodiac to {zodiac}!")
-
-#     except:
-#         await ctx.send(f"You haven't set up your user info, therefore cannot update that info :)")
+                await interaction.send("User does not exist, please create a new user")
 
 #-------------------------- DELETE user --------------------------
 @bot.tree.command(name="delete", description="Delete user")
@@ -240,15 +184,6 @@ async def deleteuser(interaction: discord.interactions):
         await interaction.response.send_message(f"{user['Username']} deleted")
     except:
         await interaction.response.send_message(f"User does not exist, unable to delete")
-        
-# # method for deleting user
-# @bot.command()
-# async def deleteuser(ctx):
-#     try:
-#         user = requests.delete(f"http://localhost:8000/{ctx.author.id}").json()
-#         await ctx.send(f"{user['Username']} has had their data deleted.")
-#     except:
-#         await ctx.send(f"That user hasn't set up their data, therefore nothing to delete")
 
 
 
