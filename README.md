@@ -29,15 +29,16 @@ Repo for Project 2
         /delete
             changed ctx to interaction command so that we can use slash commands
             added in server confirmation of deletion
-            *issues*
-                add a confirm delete prompt, to make sure users are not accidentally deleted
-                add comments
+        /moon
+            added to main.py
+4/26/26 comments added to all methods
+        /delete
+            added yes/no buttons for user to confirm their delete request
 *ideas* 
 - once user submits information, have bot create a private channel for interactions
 - add ephemeral=True flags to make certain commands visible to only the user
 *need to do*
 - clean up README.md
-- merge Jaydens branch to main branch
 - add a "/help" command, and inform new users about help command
 
 # ProjectTwo.db
