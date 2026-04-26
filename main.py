@@ -66,12 +66,15 @@ async def on_app_command_error(interaction, error):
 #--------------------------
 
 #------------------------- GET users daily horoscope --------------------------
+# method for "/horoscope" command, which retrieves and sends users daily horoscope
 @bot.tree.command(name="horoscope", description="Get your daily horoscope")
 async def horoscope(interaction: discord.Interaction):
     # Response showing that bot has acknoledged the command
     await interaction.response.send_message("Getting your horoscope...")
+
     # this method gets the horoscope based on the username of the person asking for it, so it will look up their saved zodiac sign and then get the horoscope for that sign
     horoscopeValidity = requests.get(f"http://localhost:8000/horoscope/{interaction.user.id}")
+
     # validation check for existing user in the database
     if horoscopeValidity.status_code == 200:
         horoscope = horoscopeValidity.json()
@@ -109,9 +112,8 @@ async def moon(interaction: discord.Interaction):
     await interaction.followup.send("An error has occurred trying to retrieve the moon phase, please try again later.")
 
 
-
 #------------------------- CREATE new user --------------------------
-# this method is for the "/newuser" command, which will save the user's information (id, username, and zodiac sign) into the database
+# method for "/newuser" command, which will save the user's information (id, username, and zodiac sign) into the database
 @bot.tree.command(name="newuser", description="Set up your user info with your zodiac sign")
 async def newUser(interaction: discord.Interaction, zodiac: str):
     userinfo = requests.get(f"http://localhost:8000/{interaction.user.id}").json()
@@ -133,56 +135,68 @@ async def newUser(interaction: discord.Interaction, zodiac: str):
                 "username" : interaction.user.name,
                 "zodiac" : zodiac
             }
-        
+            # new user data is addeed to the database
             requests.post("http://localhost:8000/", json=user)
         
 #-------------------------- GET user information --------------------------
-# this method is for the "/getuserinfo" command, which will get the user's information (id, username, and zodiac sign) from the database and send it to the user in a direct message
+# method for "/getuserinfo" command, which will get the user's information (id, username, and zodiac sign) from the database and send it to the user in a direct message
 @bot.tree.command(name="getuserinfo", description="view user information - username and zodiac sign")
 async def getuserinfo(interaction: discord.Interaction):
-    # this method gets the user information based on the username of the person asking for it, so it will look up their saved information and then send it to them in a direct message
+    # get the user information based on the username of the person asking for it, so it will look up their saved information and then send it to them in a direct message
     try:
         userinfo = requests.get(f"http://localhost:8000/{interaction.user.id}").json()
         # send direct message instead to server, incase the id is sensitive info
         await interaction.user.send(f"Your Id is {userinfo['User_Id']}, your username is {userinfo['Username']}, and your saved zodiac is {userinfo['User_Zodiac']}")
+        # send message in the server to notify user that information has been sent to DMs
         await interaction.response.send_message("User information has been sent to your direct messages")
+    # response to user if they do not exist in the database.
     except:
         await interaction.response.send_message(f"User does not exist, please create new user")
 
 #-------------------------- UPDATE username --------------------------
-@bot.tree.command(name="updateusername", description="if you've recently changed your username on discord, please use to command to update our records")
+# method for "/updateusername" command, which updates username, reflecting their changed discord username
+@bot.tree.command(name="updateusername", description="update username")
 async def changeusername(interaction: discord.Interaction):
-    # username in db should reflect that of their discord
+    # username in db should reflect that of their discord, retreive user information to validate whether or not user exists in database
     discordusername = interaction.user.name
-    
     userinfo = requests.put(f"http://localhost:8000/{interaction.user.id}/{discordusername}")
-
+    # update response message after successful update status code
     if userinfo.status_code == 200:
+        # send direct message instead to server, incase the id is sensitive info
         await interaction.user.send(f"You've changed your discord name, it is now {discordusername}, updated in your horoscope profile.")
+        # send message in the server to notify user that information has been sent to DMs
         await interaction.response.send_message(f"{discordusername} has been updated")
+    # response to user if they do not exist in the database.
     else:
         await interaction.response.send_message("User does not exist, please create a new user")
 
 #-------------------------- UPDATE user zodiac --------------------------
+# method for "/updateuserzodiac" command, which allows users to update their zodiac sign
 @bot.tree.command(name="updateuserzodiac", description="update zodiac sign")
 async def changezodiac(interaction: discord.Interaction, zodiac: str):
+    # get user info
     userinfo = requests.get(f"http://localhost:8000/{interaction.user.id}").json()
+    # response to user if they do not exist in the database.
     if not userinfo:
         await interaction.response.send_message("User does not exist, pease create a new user")
         return
+    # if user exists, then user will be prompted to enter their zodiac sign
     else:
         zodiac = zodiac.lower() 
         valid = ["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"]
-
+        # validation to make sure that user is entering a valid zodiac sign
         if zodiac not in valid:
             await interaction.response.send_message(f"{zodiac} is not a zodiac")
-
+        # update the users zodiac sign
         userinfovalid = requests.patch(f"http://localhost:8000/{interaction.user.id}/{zodiac}")
-
+        # update response message after successful update status code
         if userinfovalid.status_code == 200:
                 updateduserinfo = userinfovalid.json()
+                # send direct message instead to server, incase the id is sensitive info
                 await interaction.user.send(f"Your Id is {userinfo['User_Id']}, your username is {userinfo['Username']} , and your saved zodiac is {zodiac}")
+                # send message in the server to notify user that information has been sent to DMs
                 await interaction.response.send_message(f"{userinfo['Username']} has changed their zodiac to {zodiac}!")
+        # response to user if they do not exist in the database.
         else:
                 await interaction.response.send_message("User does not exist, please create a new user")
 
@@ -198,6 +212,7 @@ async def deleteuser(interaction: discord.Interaction):
             return
         # ask user for confirmation before deleting
         confirmdelete = Confirm()
+        # response message to user 
         await interaction.response.send_message("\u2757 Are you sure you want to delete your profile?", view=confirmdelete, ephemeral=True)
         await confirmdelete.wait()
         # cancel delete
@@ -208,16 +223,12 @@ async def deleteuser(interaction: discord.Interaction):
         userdelete = requests.delete(f"http://localhost:8000/{interaction.user.id}")
         if userdelete.status_code == 200:
             await interaction.followup.send(f"\u2705 {userinfo['Username']} deleted", ephemeral=True)
-        # 
+        # response to user if they do not exist in the database.
         else:
-            await interaction.followup.send("unable to delete user, try again later", ephemeral=True)           
+            await interaction.followup.send("unable to delete user, try again later", ephemeral=True)
+    # catches any possible errors
     except:
         await interaction.response.send_message(f"An error occurred, please try again later", ephemeral=True)
 
 # run the bot with the token, and log handler for debugging
 bot.run(TOKEN, log_handler=handler, log_level=logging.DEBUG)
-
-
-
-
-
