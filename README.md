@@ -80,3 +80,15 @@ Jayden Taylor
 
 Terysa Brewer
 
+# Outside Resources
+Github Docs - https://docs.github.com/en
+
+Discord Developer Docs - https://docs.discord.com/developers/
+
+Discordpy - https://discordpy.readthedocs.io/
+
+Pycord Guide - https://guide.pycord.dev/
+
+Real Python - https://realpython.com/how-to-make-a-discord-bot-python/
+
+Stack Overflow
