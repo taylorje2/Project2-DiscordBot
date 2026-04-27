@@ -280,31 +280,34 @@ async def apod(interaction: discord.Interaction):
 @bot.tree.command(name="oldapod", description="Get the NASA APOD for a past date")
 @app_commands.describe(date="Enter date in YYYY-MM-DD format (e.g. 2025-06-18)")
 async def oldapod(interaction: discord.Interaction, date: str = None):
-    # interaction defer to prevent bot timeout
-    await interaction.response.defer()
+    try:
+        # interaction defer to prevent bot timeout
+        await interaction.response.defer()
 
-    # parameters for the API request
-    params = {
-        "api_key": NASA_API_KEY,
-        "date": date 
-    }
+        # parameters for the API request
+        params = {
+            "api_key": NASA_API_KEY,
+            "date": date 
+        }
 
-    # API request
-    apod_response = requests.get(BASE_URL, params=params)
+        # API request
+        apod_response = requests.get(BASE_URL, params=params)
 
-    # check if the response was successful
-    if apod_response.status_code == 200:
-        # parse the response JSON into a nasa_apod object
-        apod_data = fromapis.nasa_apod(**apod_response.json())
+    
+        # check if the response was successful
+        if apod_response.status_code == 200:
+            # parse the response JSON into a nasa_apod object
+            apod_data = fromapis.nasa_apod(**apod_response.json())
 
-        # create an embed message with the APOD data. embed will have a purple sidebar
-        embed = discord.Embed(title=f"{apod_data.title}\nDate: {str(apod_data.date)}\n", description=apod_data.explanation, color=0x800080)
-        embed.set_image(url=apod_data.url)
+            # create an embed message with the APOD data. embed will have a purple sidebar
+            embed = discord.Embed(title=f"{apod_data.title}\nDate: {str(apod_data.date)}\n", description=apod_data.explanation, color=0x800080)
+            embed.set_image(url=apod_data.url)
 
-        # send the embed message to the channel
-        await interaction.followup.send(content=interaction.user.mention, embed=embed)
-    else:
-        await interaction.followup.send(f"Sorry, I couldn't fetch the APOD for {str(apod_data.date)}. \nPlease try again later.")
-
+            # send the embed message to the channel
+            await interaction.followup.send(content=interaction.user.mention, embed=embed)
+        else:
+            await interaction.followup.send(f"Sorry, I couldn't fetch the APOD for {str(apod_data.date)}. \nPlease try again later or check your date formatting (YYYY-MM-DD).")
+    except:
+        await interaction.followup.send(f"An error occurred. Please try again.")
 # run the bot with the token, and log handler for debugging
 bot.run(TOKEN, log_handler=handler, log_level=logging.DEBUG)
