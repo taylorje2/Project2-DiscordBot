@@ -52,15 +52,15 @@ Relational database that interacts with the bot to hold and retrieve user inform
 main.py
 Holds all of the technical code that makes the bot run, as well as debugging methods and all of the discord "/" command methods
 
-APOD.txt
-Was originally as APOD.py for testing purpose, and changed into a txt. when the branch was merged with the main branch
-*APOD.py can be ignored. It was only used for testing purposes for the APOD API and its commands.*
-
 confirm.py
 Class that creates buttons that give users the opportunity to confirm their inputs before submitting
 
 fromapis.py
 Holds all of the code that allows the bot to interact with databases.
+
+APOD.txt
+Was originally as APOD.py for testing purpose, and changed into a txt. when the branch was merged with the main branch
+*APOD.py can be ignored. It was only used for testing purposes for the APOD API and its commands.*
 
 # Notes
 
