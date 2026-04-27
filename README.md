@@ -15,19 +15,19 @@ Repo for Project 2
 
 /moon - shows daily moon phase
 
-/newuser - shows
+/newuser - creation of new users
 
-/getuserinfo
+/getuserinfo - shows user information
 
-/updateusername
+/updateusername - updates username, if they've recently changed their discord username
 
-/updateuserzodiac
+/updateuserzodiac - updates user zodiac sign
 
-/delete
+/delete - 
 
-/apod
+/apod -
 
-/oldapod
+/oldapod -
 
 # Code Overview
 ProjectTwo.db
