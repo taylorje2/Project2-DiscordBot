@@ -7,6 +7,7 @@ Repo for Project 2
 # Features
 
 # Setup Instructions
+- APOD.py can be ignored. It was only used for testing purposes for the APOD API and its commands. 
 
 # Commands
 /help - shows available commands
@@ -15,25 +16,26 @@ Repo for Project 2
 
 /moon - shows daily moon phase
 
-/newuser - shows
+/newuser - creation of new users
 
-/getuserinfo
+/getuserinfo - shows user information
 
-/updateusername
+/updateusername - updates username, if they've recently changed their discord username
 
-/updateuserzodiac
+/updateuserzodiac - updates user zodiac sign
 
-/delete
+/delete - deletes user information
 
-/apod
+/apod - shows the apod od the day
 
-/oldapod
+/oldapod - shows older APOD from a specified date (use YYYY-MM-DD format)
 
 # Code Overview
 ProjectTwo.db
 Relational database that interacts with the bot to hold and retrieve user information. Upon new user creation, a database entry is created for the user, which includes the users username and user inputed zodiac sign, and auto generated user Id number. Database will also reflect all CRUD operations.
 
 main.py
+Holds all of the technical code that makes the bot run, as well as all of the discord "/" command methods
 
 APOD.py
 
