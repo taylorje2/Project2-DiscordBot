@@ -1,7 +1,7 @@
 import requests
 import fromapis
 import discord 
-from discord.ext import commands, tasks
+from discord.ext import commands
 from discord import app_commands
 from confirm import Confirm
 from help import helpme
@@ -278,6 +278,7 @@ async def apod(interaction: discord.Interaction):
 
 # command for past APOD
 @bot.tree.command(name="oldapod", description="Get the NASA APOD for a past date")
+@app_commands.describe(date="Enter date in YYYY-MM-DD format (e.g. 2025-06-18)")
 async def oldapod(interaction: discord.Interaction, date: str = None):
     # interaction defer to prevent bot timeout
     await interaction.response.defer()
@@ -285,7 +286,7 @@ async def oldapod(interaction: discord.Interaction, date: str = None):
     # parameters for the API request
     params = {
         "api_key": NASA_API_KEY,
-        "date": date
+        "date": date 
     }
 
     # API request
