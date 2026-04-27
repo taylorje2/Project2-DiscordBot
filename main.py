@@ -4,7 +4,7 @@ import discord
 from discord.ext import commands, tasks
 from discord import app_commands
 from confirm import Confirm
-from help import helpcommand
+from help import help
 import logging
 import os
 from dotenv import load_dotenv
