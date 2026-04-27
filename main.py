@@ -173,16 +173,20 @@ async def getuserinfo(interaction: discord.Interaction):
 async def changeusername(interaction: discord.Interaction):
     # username in db should reflect that of their discord, retreive user information to validate whether or not user exists in database
     discordusername = interaction.user.name
-    userinfo = requests.put(f"http://localhost:8000/{interaction.user.id}/{discordusername}")
-    # update response message after successful update status code
-    if userinfo.status_code == 200:
-        # send direct message instead to server, incase the id is sensitive info
-        await interaction.user.send(f"You've changed your discord name, it is now {discordusername}, updated in your horoscope profile.")
-        # send message in the server to notify user that information has been sent to DMs
-        await interaction.response.send_message(f"{discordusername} has been updated")
-    # response to user if they do not exist in the database.
+    og_info = requests.get(f"http://localhost:8000/{interaction.user.id}").json()
+    if og_info["Username"] == discordusername:
+        await interaction.response.send_message(f"Username is the same, no need to update")
     else:
-        await interaction.response.send_message("User does not exist, please create a new user")
+        userinfo = requests.put(f"http://localhost:8000/{interaction.user.id}/{discordusername}")
+        # update response message after successful update status code
+        if userinfo.status_code == 200:
+            # send direct message instead to server, incase the id is sensitive info
+            await interaction.user.send(f"You've changed your discord name, it is now {discordusername}, updated in your horoscope profile.")
+            # send message in the server to notify user that information has been sent to DMs
+            await interaction.response.send_message(f"{discordusername} has been updated")
+        # response to user if they do not exist in the database.
+        else:
+            await interaction.response.send_message("User does not exist, please create a new user")
 
 #-------------------------- UPDATE user zodiac --------------------------
 # method for "/updateuserzodiac" command, which allows users to update their zodiac sign
@@ -192,7 +196,7 @@ async def changezodiac(interaction: discord.Interaction, zodiac: str):
     userinfo = requests.get(f"http://localhost:8000/{interaction.user.id}").json()
     # response to user if they do not exist in the database.
     if not userinfo:
-        await interaction.response.send_message("User does not exist, pease create a new user")
+        await interaction.response.send_message("User does not exist, please create a new user")
         return
     # if user exists, then user will be prompted to enter their zodiac sign
     else:
@@ -203,18 +207,21 @@ async def changezodiac(interaction: discord.Interaction, zodiac: str):
             await interaction.response.send_message(f"{zodiac} is not a zodiac")
         # update the users zodiac sign
         else:
-            userinfovalid = requests.patch(f"http://localhost:8000/{interaction.user.id}/{zodiac}")
-        
-            # update response message after successful update status code
-            if userinfovalid.status_code == 200:
-                    updateduserinfo = userinfovalid.json()
-                    # send direct message instead to server, incase the id is sensitive info
-                    await interaction.user.send(f"Your Id is {userinfo['User_Id']}, your username is {userinfo['Username']} , and your saved zodiac is {zodiac}")
-                    # send message in the server to notify user that information has been sent to DMs
-                    await interaction.response.send_message(f"{userinfo['Username']} has changed their zodiac to {zodiac}!")
-            # response to user if they do not exist in the database.
+            if userinfo["User_Zodiac"] == zodiac:
+                await interaction.response.send_message(f"Zodiac is the same, no need to update")
             else:
-                    await interaction.response.send_message("User does not exist, please create a new user")
+                userinfovalid = requests.patch(f"http://localhost:8000/{interaction.user.id}/{zodiac}")
+            
+                # update response message after successful update status code
+                if userinfovalid.status_code == 200:
+                        updateduserinfo = userinfovalid.json()
+                        # send direct message instead to server, incase the id is sensitive info
+                        await interaction.user.send(f"Your Id is {userinfo['User_Id']}, your username is {userinfo['Username']} , and your saved zodiac is {zodiac}")
+                        # send message in the server to notify user that information has been sent to DMs
+                        await interaction.response.send_message(f"{userinfo['Username']} has changed their zodiac to {zodiac}!")
+                # response to user if they do not exist in the database.
+                else:
+                        await interaction.response.send_message("User does not exist, please create a new user")
 
 #-------------------------- DELETE user --------------------------
 # method for "/delete" command, which deletes the user in the database
