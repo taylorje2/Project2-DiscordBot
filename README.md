@@ -35,10 +35,6 @@ Astro bot was designed for those who enjoy and have an interest in astronomy and
 # Commands
 /help - shows available commands
 
-/horoscope - shows daily horoscope
-
-/moon - shows daily moon phase
-
 /newuser - creation of new users
 
 /getuserinfo - shows user information
@@ -49,9 +45,14 @@ Astro bot was designed for those who enjoy and have an interest in astronomy and
 
 /delete - deletes user information
 
+/horoscope - shows daily horoscope
+
+/moon - shows daily moon phase
+
 /apod - shows the apod of the day
 
 /oldapod - shows older APOD from a specified date (use YYYY-MM-DD format)
+Database does not go past 1995-06-16
 
 # Code Overview
 ### ProjectTwo.db
