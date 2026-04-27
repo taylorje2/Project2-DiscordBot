@@ -165,7 +165,7 @@ async def getuserinfo(interaction: discord.Interaction):
         await interaction.followup.send("User information has been sent to your direct messages")
     # response to user if they do not exist in the database.
     else:
-        await interaction.followup.send_message(f"User does not exist, please create new user")
+        await interaction.followup.send(f"User does not exist, please create new user")
 
 #-------------------------- UPDATE username --------------------------
 # method for "/updateusername" command, which updates username, reflecting their changed discord username
