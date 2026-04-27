@@ -24,9 +24,10 @@ async def helpme(interaction: discord.Interaction):
     embed.add_field(name="/apod", value="Get the NASA APOD for today", inline=False)
     # embed for /oldapod
     embed.add_field(name="/oldapod", value="Get the NASA APOD for a past date", inline=False)
-    # embed for /help
-    embed.add_field(name="/help", value="Create a new User", inline=False)
     
+    # embed for /help
+    embed.add_field(name="/help", value="Show all commands", inline=False)
+
     # embed for tip
     embed.set_footer(text="Use /help to view all commands anytime")
     
