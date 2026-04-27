@@ -7,6 +7,7 @@ Repo for Project 2
 # Features
 
 # Setup Instructions
+- APOD.py can be ignored. It was only used for testing purposes for the APOD API and its commands. 
 
 # Commands
 /help - shows available commands
