@@ -35,9 +35,10 @@ ProjectTwo.db
 Relational database that interacts with the bot to hold and retrieve user information. Upon new user creation, a database entry is created for the user, which includes the users username and user inputed zodiac sign, and auto generated user Id number. Database will also reflect all CRUD operations.
 
 main.py
-Holds all of the technical code that makes the bot run, as well as all of the discord "/" command methods
+Holds all of the technical code that makes the bot run, as well as debugging methods and all of the discord "/" command methods
 
-APOD.py
+APOD.txt
+Was originally as APOD.py for testing purpose, and changed into a txt. when the branch was merged with the main branch
 
 confirm.py
 
