@@ -25,3 +25,4 @@ def helpcommand(bot):
 # https://discordpy.readthedocs.io/en/stable/ext/commands/api.html?highlight=help#help-commands
 # https://guide.pycord.dev/extensions/commands/help-command
 # https://stackoverflow.com/questions/64092921/how-do-i-put-discord-py-help-command-in-an-embed
+# https://discordpy.readthedocs.io/en/stable/ext/tasks/index.html
