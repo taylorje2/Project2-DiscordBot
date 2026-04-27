@@ -66,6 +66,8 @@ Holds all of the code that allows the bot to interact with databases.
 
 # Developers
 Rachel Smith
+
 Jayden Taylor
+
 Terysa Brewer
 
