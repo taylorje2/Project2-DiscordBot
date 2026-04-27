@@ -4,7 +4,7 @@ import discord
 from discord.ext import commands, tasks
 from discord import app_commands
 from confirm import Confirm
-from helpembed import get_help_embed
+from help import helpme
 import logging
 import os
 from dotenv import load_dotenv
@@ -25,17 +25,17 @@ handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w'
 intents = discord.Intents.default()
 intents.message_content = True # allows bot to send message
 
-# allows bot access to server member data
-intents.members = True
+# # allows bot access to server member data
+# intents.members = True
 
 bot = commands.Bot(command_prefix='/', intents=intents)
 #^any commands sent bot start with '/', for instance '/horoscope'
-tree = bot.tree
+# tree = bot.tree
 
 
-#--------------------------
+#-----------------------------
 # DEBUGGING/OTHER BOT METHODS
-#--------------------------
+#-----------------------------
 
 # syncs tree commands
 async def setup_hook():
@@ -45,7 +45,6 @@ bot.setup_hook = setup_hook
 # when the bot is ready, it will print this message in the terminal
 @bot.event
 async def on_ready():
-    await bot.tree.sync()
     print(f'{bot.user} has connected to Discord!') 
 
 # when the bot receives a message, it will print the message content in the terminal, and if the message is a greeting, it will respond with a greeting (for debug purposes)
@@ -66,19 +65,18 @@ async def on_message(message):
 async def on_app_command_error(interaction, error):
     print (f"[ERROR] An error occurred: {error}")
 
-# help command on 24 hour loop, limits spamming of the server, but also serves as a reminder that users can request their daily content
+# help command
 @bot.tree.command(name="help", description="Show all commands")
-async def helpcommand(interaction: discord.Interaction):
-    embed = help.get_help_embed()
-    await interaction.response.send_message(embed=embed, ephemeral=True)
+async def help(interaction: discord.Interaction):
+    await helpme(interaction)
 
 
-#-------------------------- END OF DEBUGGING --------------------------
+#--------------------- END OF DEBUGGING/OTHER BOT METHODS ---------------------
 
 
-#--------------------------
+#-----------------------------
 # BOT COMMANDS
-#--------------------------
+#-----------------------------
 
 #------------------------- GET users daily horoscope --------------------------
 # method for "/horoscope" command, which retrieves and sends users daily horoscope
@@ -157,16 +155,17 @@ async def newUser(interaction: discord.Interaction, zodiac: str):
 # method for "/getuserinfo" command, which will get the user's information (id, username, and zodiac sign) from the database and send it to the user in a direct message
 @bot.tree.command(name="getuserinfo", description="view user information - username and zodiac sign")
 async def getuserinfo(interaction: discord.Interaction):
+    await interaction.response.defer(ephemeral=True)
     # get the user information based on the username of the person asking for it, so it will look up their saved information and then send it to them in a direct message
     try:
         userinfo = requests.get(f"http://localhost:8000/{interaction.user.id}").json()
         # send direct message instead to server, incase the id is sensitive info
         await interaction.user.send(f"Your Id is {userinfo['User_Id']}, your username is {userinfo['Username']}, and your saved zodiac is {userinfo['User_Zodiac']}")
         # send message in the server to notify user that information has been sent to DMs
-        await interaction.response.send_message("User information has been sent to your direct messages")
+        await interaction.followup.send("User information has been sent to your direct messages")
     # response to user if they do not exist in the database.
     except:
-        await interaction.response.send_message(f"User does not exist, please create new user")
+        await interaction.followup.send_message(f"User does not exist, please create new user")
 
 #-------------------------- UPDATE username --------------------------
 # method for "/updateusername" command, which updates username, reflecting their changed discord username
