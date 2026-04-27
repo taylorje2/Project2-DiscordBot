@@ -5,3 +5,5 @@ pydantic
 sqlalchemy
 discord.py
 python-dotenv
+fastapi
+uvicorn
