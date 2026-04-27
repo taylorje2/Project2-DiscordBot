@@ -19,6 +19,10 @@ Astro bot was designed for those who enjoy and have an interest in astronomy and
 3. Add your bot token and APOD API key (in .env file):
     DISCORD_TOKEN=insert_your_bot_token_here
     APOD_API_KEY=insert_your_apod_api_key_here
+    *On your Discord bot settings, turn on all intents:*
+        *Presence Intent*
+        *Server Members Intent*
+        *Message Content Intent*
 4. Run Uvicorn
     python -m uvicorn fromapis:app --host localhost --port 8000
 5. Run the bot
