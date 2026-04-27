@@ -310,6 +310,6 @@ async def oldapod(interaction: discord.Interaction, date: str = None):
         else:
             await interaction.followup.send(f"Sorry, I couldn't fetch the APOD for {str(apod_data.date)}. \nPlease try again later or check your date formatting (YYYY-MM-DD).")
     except:
-        await interaction.followup.send(f"An error occurred. Please try again.")
+        await interaction.followup.send(f"An error occurred. Please try again later or check your date formatting (YYYY-MM-DD).")
 # run the bot with the token, and log handler for debugging
 bot.run(TOKEN, log_handler=handler, log_level=logging.DEBUG)
