@@ -18,6 +18,8 @@ def helpcommand(bot):
         
         embed.set_footer(text="Tip: Use /help to view commands anytime")
 
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+
 
 #-------------------------- Outside Resources --------------------------
 # https://discordpy.readthedocs.io/en/stable/ext/commands/api.html?highlight=help#help-commands
