@@ -3,13 +3,13 @@ Moon/Horoscope/APOD
 Repo for Project 2
 
 # Description
-Astro bot was designed for those who enjoy and have an interest in astronomy and astrological signs. The bot was designed with the intentions of giving users a daily dose of personalized content on their interests.
+Astro bot was designed for those who enjoy and have an interest in astronomy and astrological signs. The bot was designed with the intention of giving users a daily dose of personalized content on their interests.
 
 # Features
 - Tells users their daily horoscope
 - Displays the daily moon phase
-- Display daily APOD
-- Users are able to request previous APODS
+- Display daily APOD (Astronomy Picture of the Day)
+- Displays user-requested past APODs
 
 # Setup Instructions
 1. Clone this repository
@@ -28,6 +28,10 @@ Astro bot was designed for those who enjoy and have an interest in astronomy and
 5. Run the bot
     python main.py
 
+# Notes
+- APOD API key was retrieved from the NASA Open APIs site: https://api.nasa.gov/
+- NASA only provides APODs from 06-16-1995 to the current date.
+
 # Commands
 /help - shows available commands
 
@@ -39,37 +43,35 @@ Astro bot was designed for those who enjoy and have an interest in astronomy and
 
 /getuserinfo - shows user information
 
-/updateusername - updates username, if they've recently changed their discord username
+/updateusername - updates username, if they've recently changed their Discord username
 
 /updateuserzodiac - updates user zodiac sign
 
 /delete - deletes user information
 
-/apod - shows the apod od the day
+/apod - shows the apod of the day
 
 /oldapod - shows older APOD from a specified date (use YYYY-MM-DD format)
 
 # Code Overview
-ProjectTwo.db
+### ProjectTwo.db
 Relational database that interacts with the bot to hold and retrieve user information.
 
-main.py
-Holds all of the technical code that makes the bot run, as well as debugging methods and all of the discord "/" command methods
+### main.py
+Holds all of the technical code that makes the bot run, as well as debugging methods and all of the Discord "/" command methods
 
-fromapis.py
+### fromapis.py
 Holds all of the code that allows the bot to interact with databases.
 
-confirm.py
+### confirm.py
 Class that creates buttons that give users the opportunity to confirm their inputs before submitting
 
-help.py
+### help.py
 
 
-APOD.txt
-Was originally as APOD.py for testing purpose, and changed into a txt. when the branch was merged with the main branch
+### APOD.txt
+Was originally named APOD.py for testing purposes, and changed into a .txt when the branch was merged with the main branch
 *APOD.py can be ignored. It was only used for testing purposes for the APOD API and its commands.*
-
-# Notes
 
 # Developers
 Rachel Smith
