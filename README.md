@@ -64,10 +64,10 @@ Holds all of the technical code that makes the bot run, as well as debugging met
 Holds all of the code that allows the bot to interact with databases.
 
 ### confirm.py
-Class that creates buttons that give users the opportunity to confirm their inputs before submitting
+Holds the code that creates buttons that give users the opportunity to confirm their inputs before submitting
 
 ### help.py
-
+Holds the code for the embedded help command
 
 ### APOD.txt
 Was originally named APOD.py for testing purposes, and changed into a .txt when the branch was merged with the main branch
