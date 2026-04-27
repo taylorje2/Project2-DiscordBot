@@ -1,9 +1,10 @@
 import requests
 import fromapis
 import discord 
-from discord.ext import commands
+from discord.ext import commands, tasks
 from discord import app_commands
 from confirm import Confirm
+from help import helpcommand
 import logging
 import os
 from dotenv import load_dotenv
@@ -33,7 +34,7 @@ tree = bot.tree
 
 
 #--------------------------
-# DEBUGGING METHODS
+# DEBUGGING/OTHER BOT METHODS
 #--------------------------
 
 # syncs tree commands
@@ -64,6 +65,11 @@ async def on_message(message):
 @bot.tree.error
 async def on_app_command_error(interaction, error):
     print (f"[ERROR] An error occurred: {error}")
+
+# help command on 24 hour loop, limits spamming of the server, but also serves as a reminder that users can request their daily content
+@bot.tree.command(name="help", description="Show all commands")
+async def helpme(interaction: discord.Interaction):
+    await interaction.response.send_message(embed=help(),ephemeral=True)
 
 #-------------------------- END OF DEBUGGING --------------------------
 
@@ -136,6 +142,7 @@ async def newUser(interaction: discord.Interaction, zodiac: str):
         else:
             # if the zodiac sign is valid, a message will be sent to the user confirming that their zodiac sign has been saved, and then their information will be sent to the database to be saved
             await interaction.response.send_message(f"Your saved zodiac is {zodiac}")
+            await interaction.followup.send("Tip: Use /help to see all commands.", ephemeral=True)
             # create a user object with the user's information, which will be sent to the database
             user = {
                 "user_id" : interaction.user.id,
