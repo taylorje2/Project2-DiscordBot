@@ -12,20 +12,20 @@ Astro bot was designed for those who enjoy and have an interest in astronomy and
 - Displays user-requested past APODs
 
 # Setup Instructions
-1. Clone this repository 
+1. Clone this repository\
     git clone https://github.com/taylorje2/Project2-DiscordBot.git
-2. Install dependencies
+2. Install dependencies\
     pip install -r requirements.txt
-3. Add your bot token and APOD API key (in .env file):
-    DISCORD_TOKEN=insert_your_bot_token_here
-    APOD_API_KEY=insert_your_apod_api_key_here
-    *On your Discord bot settings, turn on all intents:*
-        *Presence Intent*
-        *Server Members Intent*
-        *Message Content Intent*
-4. Run Uvicorn
+3. Add your bot token and APOD API key (in .env file):\
+    DISCORD_TOKEN=insert_your_bot_token_here\
+    APOD_API_KEY=insert_your_apod_api_key_here\
+    *On your Discord bot settings, turn on all intents:*\
+        *Presence Intent*\
+        *Server Members Intent*\
+        *Message Content Intent*\
+4. Run Uvicorn\
     python -m uvicorn fromapis:app --host localhost --port 8000
-5. Run the bot
+5. Run the bot\
     python main.py
 
 # Notes
@@ -51,8 +51,8 @@ Astro bot was designed for those who enjoy and have an interest in astronomy and
 
 /apod - shows the apod of the day
 
-/oldapod - shows older APOD from a specified date 
-(use YYYY-MM-DD format)
+/oldapod - shows older APOD from a specified date\
+(use YYYY-MM-DD format)\
 Database does not go past 1995-06-16
 
 # Code Overview
@@ -72,7 +72,7 @@ Holds the code that creates buttons that give users the opportunity to confirm t
 Holds the code for the embedded help command
 
 ### APOD.txt
-Was originally named APOD.py for testing purposes, and changed into a .txt when the branch was merged with the main branch
+Was originally named APOD.py for testing purposes, and changed into a .txt when the branch was merged with the main branch\
 *APOD.py can be ignored. It was only used for testing purposes for the APOD API and its commands.*
 
 # Developers
