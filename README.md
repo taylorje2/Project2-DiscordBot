@@ -22,7 +22,7 @@ Astro bot was designed for those who enjoy and have an interest in astronomy and
     *On your Discord bot settings, turn on all intents:*\
         *Presence Intent*\
         *Server Members Intent*\
-        *Message Content Intent*\
+        *Message Content Intent*
 4. Run Uvicorn\
     python -m uvicorn fromapis:app --host localhost --port 8000
 5. Run the bot\
