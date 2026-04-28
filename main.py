@@ -174,7 +174,9 @@ async def changeusername(interaction: discord.Interaction):
     # username in db should reflect that of their discord, retreive user information to validate whether or not user exists in database
     discordusername = interaction.user.name
     og_info = requests.get(f"http://localhost:8000/{interaction.user.id}").json()
-    if og_info["Username"] == discordusername:
+    if og_info == None:
+        await interaction.response.send_message("User does not exist, please create a new user")
+    elif og_info["Username"] == discordusername:
         await interaction.response.send_message(f"Username is the same, no need to update")
     else:
         userinfo = requests.put(f"http://localhost:8000/{interaction.user.id}/{discordusername}")
@@ -232,7 +234,7 @@ async def deleteuser(interaction: discord.Interaction):
         userinfo = requests.get(f"http://localhost:8000/{interaction.user.id}").json()
         # response message to user if information does not exist
         if not userinfo:
-            await interaction.response.send_message("User does not exist, pease create a new user", ephemeral=True)
+            await interaction.response.send_message("User does not exist, please create a new user", ephemeral=True)
             return
         # ask user for confirmation before deleting
         confirmdelete = Confirm()
