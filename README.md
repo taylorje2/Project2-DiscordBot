@@ -12,7 +12,7 @@ Astro bot was designed for those who enjoy and have an interest in astronomy and
 - Displays user-requested past APODs
 
 # Setup Instructions
-1. Clone this repository \n
+1. Clone this repository 
     git clone https://github.com/taylorje2/Project2-DiscordBot.git
 2. Install dependencies
     pip install -r requirements.txt
