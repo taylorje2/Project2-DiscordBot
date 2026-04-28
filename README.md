@@ -12,7 +12,7 @@ Astro bot was designed for those who enjoy and have an interest in astronomy and
 - Displays user-requested past APODs
 
 # Setup Instructions
-1. Clone this repository
+1. Clone this repository \n
     git clone https://github.com/taylorje2/Project2-DiscordBot.git
 2. Install dependencies
     pip install -r requirements.txt
@@ -51,7 +51,8 @@ Astro bot was designed for those who enjoy and have an interest in astronomy and
 
 /apod - shows the apod of the day
 
-/oldapod - shows older APOD from a specified date (use YYYY-MM-DD format)
+/oldapod - shows older APOD from a specified date 
+(use YYYY-MM-DD format)
 Database does not go past 1995-06-16
 
 # Code Overview
