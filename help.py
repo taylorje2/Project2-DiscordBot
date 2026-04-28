@@ -23,7 +23,7 @@ async def helpme(interaction: discord.Interaction):
     # embed for /apod
     embed.add_field(name="/apod", value="Get the NASA APOD for today", inline=False)
     # embed for /oldapod
-    embed.add_field(name="/oldapod", value="Get the NASA APOD for a past date", inline=False)
+    embed.add_field(name="/oldapod", value="Get the NASA APOD for a past date\nDate format is YYYY-MM-DD\nPlease enter dashes (-) as well\nDatabase cannot go further than 1995-06-16", inline=False)
     
     # embed for /help
     embed.add_field(name="/help", value="Show all commands", inline=False)
